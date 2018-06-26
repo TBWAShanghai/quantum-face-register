@@ -1,0 +1,193 @@
+*
+{
+    margin: 0;
+    padding: 0;
+}
+
+.box
+{
+    overflow: hidden;
+
+    width: 90%;
+    margin: 0 auto;
+}
+
+.title
+{
+    font-size: .3rem;
+
+    text-align: center;
+}
+
+.upload-box
+{
+    position: relative;
+
+    box-sizing: border-box;
+    min-height: 6rem;
+
+    border: 1px solid black;
+}
+
+canvas
+{
+    display: block;
+
+    width: 100%;
+}
+
+.row-box
+{
+    overflow: hidden;
+
+    margin: .1rem 0;
+}
+
+.row-box:before,
+.row-box:after
+{
+    display: table-cell;
+    clear: both;
+
+    content: '';
+}
+
+.left
+{
+    font-size: .3rem;
+    line-height: .5rem;
+
+    float: left;
+
+    width: 20%;
+    height: .5rem;
+}
+
+.right
+{
+    float: left;
+
+    width: 80%;
+}
+
+.right input
+{
+    font-size: .3rem;
+
+    display: block;
+
+    width: 100%;
+    padding-left: .3rem;
+
+    border: 1px solid black;
+}
+
+.box .text-center
+{
+    line-height: 0;
+}
+
+.submit
+{
+    font-size: .3rem;
+
+    padding: .15rem .4rem;
+}
+
+.profile-img
+{
+    position: relative;
+    width: 5.5rem;
+    margin: 0 auto;
+    height: 6.875rem;
+
+    text-align: center;
+
+    color: #fff;
+    background-color: #fff;
+    border: 1px solid black;
+    box-sizing: border-box;
+}
+.profile-img img{
+  vertical-align: top;
+}
+.profile-img input{
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 100%;
+
+    opacity: 0;
+}
+
+.dish-img
+{
+    position: relative;
+
+    width: 600px;
+    height: 300px;
+
+    text-align: center;
+
+    color: #fff;
+    background-color: blue;
+}
+.profile-edit canvas{
+  width: 5.5rem;
+  margin: 0 auto;
+}
+.profile-edit-popup
+{
+    position: absolute;
+    z-index: 3;
+    top: 0;
+    left: 0;
+
+    display: none;
+
+    width: 100%;
+    height: 100%;
+
+    background-color: rgba(0, 0, 0, .8);
+}
+
+.profile-edit
+{
+    width: 100%;
+    /*height: 6rem;*/
+
+    /*background-color: #fff;*/
+    /*margin: 100px auto 0;*/
+}
+
+.photo_handler
+{
+    width: 100%;
+    height: 6.875rem;
+}
+
+.btns
+{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+
+    width: 100%;
+
+    text-align: center;
+}
+
+.btn2
+{
+    font-size: 0.3rem;
+
+    display: inline-block;
+
+    margin:0 0.2rem;
+    padding: 0.1rem 0.4rem;
+
+    color: #000;
+    background-color: chocolate;
+}

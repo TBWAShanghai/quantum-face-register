@@ -1,0 +1,79 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <title>注册</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="styles/bootstarp.min.css">
+    <link rel="stylesheet" href="styles/index.css">
+    <script>
+    (function(doc, win) {
+        var docEl = doc.documentElement,
+            resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+            recalc = function() {
+                var clientWidth = docEl.clientWidth;
+                if (!clientWidth) return;
+                if (clientWidth >= 640) {
+                    docEl.style.fontSize = '100px';
+                } else {
+                    docEl.style.fontSize = 100 * (clientWidth / 640) + 'px';
+                }
+            };
+
+        if (!doc.addEventListener) return;
+        win.addEventListener(resizeEvt, recalc, false);
+        doc.addEventListener('DOMContentLoaded', recalc, false);
+    })(document, window);
+    </script>
+    <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+</head>
+
+<body>
+    <div class="box">
+        <div class="title">
+            上传正面头像
+        </div>
+        <div class="profile-img">
+            <input type="file" class="upload">
+            <img class="confirm-face-img" width="100%" alt="">
+        </div>
+        <div class="profile-edit-popup popup">
+            <div class="photo_handler">
+                <div class="profile-edit">
+                    <canvas class="face-canvas" width="400" height="500"></canvas>
+                </div>
+            </div>
+            <div class="btns">
+                <a class="btn btn2 cancel">取消</a>
+                <a class="btn btn2" id="confirm_profile">确认</a>
+            </div>
+        </div>
+        <div class="row-box">
+            <div class="left">
+                姓名：
+            </div>
+            <div class="right">
+                <input id="name" type="text" placeholder="请填写姓名">
+            </div>
+        </div>
+        <div class="row-box">
+            <div class="left">
+                电话：
+            </div>
+            <div class="right">
+                <input id="tel" type="phone" placeholder="请填写电话">
+            </div>
+        </div>
+        <div class="text-center">
+            <button id="submit" class="btn btn-default btn-success submit">提交</button>
+        </div>
+    </div>
+    <script type="text/javascript" src="scripts/jquery.min.js"></script>
+    <script type="text/javascript" src="scripts/binary-file.js"></script>
+    <script type="text/javascript" src="scripts/exif.js"></script>
+    <script type="text/javascript" src="scripts/mega-pix-image.js"></script>
+    <script type="text/javascript" src="scripts/hammer.min.js"></script>
+    <script type="text/javascript" src="scripts/uploader.js"></script>
+    <script type="text/javascript" src="scripts/index.js"></script>
+</body>

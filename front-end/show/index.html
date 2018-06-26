@@ -1,0 +1,31 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <title>获取头像</title>
+    <link rel="stylesheet" href="styles/index.css">
+</head>
+
+<body>
+    <div class="demo-frame">
+        <div class="demo-container">
+            <video id="video" width="960" height="720" preload autoplay loop muted></video>
+            <canvas id="canvas" width="960" height="720"></canvas>
+        </div>
+        <canvas id="full" width="960" height="720" style="opacity: 0;">
+        </canvas>
+        <canvas id="shortCut" width="400" height="400">
+        </canvas>
+        <div class="success info">
+        	验证成功
+        </div>
+        <div class="fail info">
+        	验证失败
+        </div>
+    </div>
+    <script src="scripts/jquery.min.js"></script>
+    <script src="scripts/tracking.min.js"></script>
+    <script src="scripts/face.min.js"></script>
+    <script src="scripts/dat.dui.min.js"></script>
+    <script src="scripts/index.js"></script>
+</body>
