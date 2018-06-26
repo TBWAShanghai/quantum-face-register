@@ -1,8 +1,8 @@
 /**
  * Created by necis on 2018/6/26.
  */
-var api={
-    "upload":"http://localhost:4000/upload"
+var api = {
+    "upload": "http://localhost:5000/register"
 }
 var Mobile = {
     Android: function() {
@@ -36,11 +36,12 @@ var Mobile = {
 };
 
 $(function() {
+    var img;
+    var openid="abc";
     var IS_IOS = Mobile.iOS();
 
     var $page, $canvas, $handler, $confirm;
     var $photo;
-
 
     // photo
     var ctx;
@@ -91,6 +92,7 @@ $(function() {
                     initImage(image, faceCallback, canvas, $confirm, $handler)
                 };
                 image.src = base64;
+                img=base64;
                 $photo.val('');
                 $profilepopup.show();
             };
@@ -104,21 +106,32 @@ $(function() {
         $(".popup").hide();
     });
 
-    $submit.on('click',function(){
-        var base64="";
-        var name=$("#name").val();
-        var tel=$("#tel").val();
-        var openid = openid;
-
+    $submit.on('click', function() {
+        var base64 = img;
+        var name = $("#name").val();
+        var tel = $("#tel").val();
+        var id = openid;
+        if(!img){
+            alert("请上传图片");
+            return false;
+        }
         if (name == '') {
             alert("请填写姓名");
             return false;
         }
 
-        if(tel==''){
+        if (tel == '') {
             alert("请填写电话");
             return false;
         }
+        var json={
+                openid: id,
+                name: name,
+                tel: tel,
+                img: base64
+            };
+
+        console.log(json);
 
         $.ajax({
             url: api.upload,
@@ -129,10 +142,14 @@ $(function() {
                 tel: tel,
                 img: base64
             },
-            success: function (e) {
-                
+            beforeSend: function() {
+                $(".top-box").show();
             },
-            error: function () {
+            success: function(e) {
+                $(".top-box").hide();
+            },
+            error: function() {
+                $(".top-box").hide();
                 alert('错误的网路环境！请联系管理人员！');
             }
         });

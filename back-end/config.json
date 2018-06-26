@@ -1,0 +1,10 @@
+{
+	"apiPort": "5000",
+	"db": "mongodb://127.0.0.1:27017/faceregister",
+	"delay": 1000,
+	"scheduleTime":"0 0 9 * * *",
+	"options": {
+		"headless": true,
+		"args": ["--no-sandbox", "--disable-setuid-sandbox"]
+	}
+}
