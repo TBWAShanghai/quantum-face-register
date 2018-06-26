@@ -25,6 +25,15 @@
         win.addEventListener(resizeEvt, recalc, false);
         doc.addEventListener('DOMContentLoaded', recalc, false);
     })(document, window);
+    function getUrlParameterByName(name) {
+        name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+        var regex = new RegExp('[\\?&]' + name + '=([^&#]*)'),
+            results = regex.exec(location.search);
+        return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+    }
+    if(!getUrlParameterByName('openid')){
+        window.location.href="http://wechat.mynecis.cn/wx/wx/oauth/openid?url="+window.location.origin+window.location.pathname;
+    }
     </script>
     <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
 </head>

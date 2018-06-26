@@ -9,7 +9,8 @@
 <body>
     <div class="demo-frame">
         <div class="demo-container">
-            <video id="video" width="960" height="720" preload autoplay loop muted></video>
+            <!-- <video id="video" width="960" height="720" preload autoplay loop muted playsinline></video> -->
+            <video id="video" width="480" height="360" preload autoplay loop muted playsinline></video>
             <canvas id="canvas" width="960" height="720"></canvas>
         </div>
         <canvas id="full" width="960" height="720" style="opacity: 0;">
@@ -23,6 +24,7 @@
         	验证失败
         </div>
     </div>
+    <script src="scripts/adapter.js"></script>
     <script src="scripts/jquery.min.js"></script>
     <script src="scripts/tracking.min.js"></script>
     <script src="scripts/face.min.js"></script>

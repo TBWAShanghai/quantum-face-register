@@ -19,7 +19,7 @@
    });
    var flag = true;
    var config=new function(){
-    this.width=300;
+    this.width=50;
    }
    tracker.on('track', function(event) {
      context.clearRect(0, 0, canvas.width, canvas.height);
@@ -28,6 +28,7 @@
 
        if (flag) {
          console.log("拍照");
+         alert("拍照");
          // getPhoto();
          // shortCut.width = rect.width;
          // shortCut.height = rect.height;
