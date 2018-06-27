@@ -1,0 +1,49 @@
+html,
+body
+{
+    height: 100%;
+}
+
+body
+{
+    font-family: Helvetica, sans-serif;
+
+    overflow: hidden;
+
+    margin: 0;
+
+    background-color: #000;
+    ;
+}
+
+#menu
+{
+    position: absolute;
+    bottom: 20px;
+
+    width: 100%;
+
+    text-align: center;
+}
+button
+{
+    padding: 5px 10px;
+
+    cursor: pointer;
+
+    color: rgba(127, 255, 255, .75);
+    border: 0;
+    outline: 1px solid rgba(127, 255, 255, .75);
+    background: transparent;
+}
+
+button:hover
+{
+    background-color: rgba(0, 255, 255, .5);
+}
+
+button:active
+{
+    color: #000;
+    background-color: rgba(0, 255, 255, .75);
+}

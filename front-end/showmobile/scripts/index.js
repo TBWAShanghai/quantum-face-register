@@ -1,4 +1,6 @@
-﻿ var url = "http://localhost:3000/tencent/identify";
+﻿ // var url = "http://localhost:3000/tencent/identify";
+ // var url = "http://wechat.mynecis.cn/wx/tencent/identify";
+ var url = "http://wechat.mynecis.cn/wx/";
  window.onload = function() {
    var video = document.getElementById('video');
    var canvas = document.getElementById('canvas');
@@ -9,7 +11,7 @@
 
    var full = document.getElementById('full');
    var fullContext = full.getContext('2d');
-   var time = 3000;
+   var time = 10000;
    tracker.setInitialScale(4);
    tracker.setInitialScale(1);
    tracker.setStepSize(2);
@@ -17,9 +19,12 @@
    tracking.track('#video', tracker, {
      camera: true
    });
+   var radio = 9/16;
+   canvas.height = 480 / radio;
+   full.height = 480 / radio;
    var flag = true;
-   var config=new function(){
-    this.width=300;
+   var config = new function() {
+     this.width = 200;
    }
    tracker.on('track', function(event) {
      context.clearRect(0, 0, canvas.width, canvas.height);
@@ -28,7 +33,7 @@
 
        if (flag) {
          console.log("拍照");
-         alert("拍照");
+         // alert("拍照");
          // getPhoto();
          // shortCut.width = rect.width;
          // shortCut.height = rect.height;
@@ -69,22 +74,32 @@
    function sendPhoto(photo, rec) {
      $.ajax({
        url: url,
-       type: "post",
+       type: "get",
        dataType: "json",
-       data: {
-         img: photo.substring(photo.indexOf(",") + 1)
-       },
+       // data: {
+       //   img: photo.substring(photo.indexOf(",") + 1)
+       // },
        success: function(result) {
          console.log(result);
          if (result.message == 'OK') {
            if (result.data.candidates[0].confidence >= 70) {
              console.log("验证成功");
+             // alert("验证成功");
            } else {
              console.log("验证失败");
+             // alert("验证失败");
            }
+         } else {
+           alert("发送失败");
          }
 
        }
+       // error: function(error) {
+       //   // alert(error);
+       //   // $("#error").html(error);
+       //   debug.log(error);
+       //   // document.body.appendChild(error);
+       // }
      });
    }
  };

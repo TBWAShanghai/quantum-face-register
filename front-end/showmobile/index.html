@@ -1,0 +1,56 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <title>获取头像</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="styles/index.css">
+    <script>
+    (function(doc, win) {
+        var docEl = doc.documentElement,
+            resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+            recalc = function() {
+                var clientWidth = docEl.clientWidth;
+                if (!clientWidth) return;
+                if (clientWidth >= 640) {
+                    docEl.style.fontSize = '100px';
+                } else {
+                    docEl.style.fontSize = 100 * (clientWidth / 640) + 'px';
+                }
+            };
+
+        if (!doc.addEventListener) return;
+        win.addEventListener(resizeEvt, recalc, false);
+        doc.addEventListener('DOMContentLoaded', recalc, false);
+    })(document, window);
+    </script>
+</head>
+
+<body>
+    <div class="demo-frame">
+        <div class="demo-container">
+            <!-- <video id="video" width="960" height="720" preload autoplay loop muted playsinline></video> -->
+            <video id="video" width="480" height="auto" preload autoplay loop muted playsinline></video>
+            <canvas id="canvas" width="480" height="360"></canvas>
+            <canvas id="full" width="480" height="360" style="opacity: 0;">
+        </div>
+        </canvas>
+        <canvas id="shortCut" width="200" height="200">
+        </canvas>
+        <!-- <div class="success info">
+            验证成功
+        </div>
+        <div class="fail info">
+            验证失败
+        </div> -->
+    </div>
+    <div id="error" style="position: absolute;z-index: 1000;color: red;font-size: 0.3rem; width: 100%;left: 0;top: 0;"></div>
+    <script src="scripts/debug.js"></script>
+    <script src="scripts/adapter.js"></script>
+    <script src="scripts/jquery.min.js"></script>
+    <script src="scripts/tracking.min.js"></script>
+    <script src="scripts/face.min.js"></script>
+    <script src="scripts/dat.dui.min.js"></script>
+    <script src="scripts/index.js"></script>
+</body>
