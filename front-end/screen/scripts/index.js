@@ -3,7 +3,7 @@ var count = 300;
 var camera, scene, renderer;
 var controls;
 
-var backgroundMesh,backgroundScene,backgroundCamera;
+var backgroundMesh, backgroundScene, backgroundCamera;
 
 var objects = [];
 var targets = {
@@ -15,8 +15,8 @@ var targets = {
 
 var manager = new THREE.LoadingManager();
 manager.onLoad = init;
-var loader = new THREE.TextureLoader( manager );
-var bgTexture = loader.load( './images/bg.jpg');
+var loader = new THREE.TextureLoader(manager);
+var bgTexture = loader.load('./images/bg.jpg');
 
 // init();
 // animate();
@@ -24,25 +24,24 @@ var bgTexture = loader.load( './images/bg.jpg');
 function init() {
 
 	camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 1, 10000);
-	camera.position.z = 3000;
+	camera.position.z = 5000;
 
 	scene = new THREE.Scene();
 
 	//add bg
 	var backgroundMesh = new THREE.Mesh(
-    	new THREE.PlaneGeometry(20000, 20000),
+		new THREE.PlaneGeometry(2, 2,0),
 		new THREE.MeshBasicMaterial({
-    		map: bgTexture
+			map: bgTexture
 		})
-    );
+	);
 
 	backgroundMesh.material.depthTest = false;
 	backgroundMesh.material.depthWrite = false;
-
 	backgroundScene = new THREE.Scene();
 	backgroundCamera = new THREE.Camera();
-	backgroundScene.add( backgroundCamera );
-	backgroundScene.add( backgroundMesh );
+	backgroundScene.add(backgroundCamera);
+	backgroundScene.add(backgroundMesh);
 
 	// table
 	for (var i = 0; i < count; i++) {
@@ -146,8 +145,8 @@ function init() {
 	renderer.setSize(window.innerWidth, window.innerHeight);
 	document.getElementById('container').appendChild(renderer.domElement);
 
-	// controls = new THREE.TrackballControls(camera, renderer.domElement);
-	var controls = new THREE.OrbitControls(camera, renderer.domElement);
+	controls = new THREE.TrackballControls(camera, renderer.domElement);
+	// var controls = new THREE.OrbitControls(camera, renderer.domElement);
 	controls.rotateSpeed = 0.5;
 	controls.minDistance = 500;
 	controls.maxDistance = 6000;
@@ -243,12 +242,14 @@ function animate() {
 
 	TWEEN.update();
 
-	// controls.update();
+	controls.update();
 
 }
 
 function render() {
-	renderer.render( backgroundScene, backgroundCamera );
+	renderer.autoClear = false;
+	renderer.clear();
+	renderer.render(backgroundScene, backgroundCamera);
 	renderer.render(scene, camera);
 
 }
