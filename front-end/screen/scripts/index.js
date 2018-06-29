@@ -59,30 +59,8 @@ function init() {
 	//addGUI
 	addGUI();
 	//create shape object
-	var shapeObjects = new THREE.Object3D();
-	scene.add(shapeObjects);
-	var shape1 = createShapeObject(30);
-	var shape2 = shape1.clone();
-	shape2.position.x = 1000;
-	shape2.rotation.y = Math.PI;
-	var shape3 = shape1.clone();
-	shape3.position.y = -1000;
-	shape3.rotation.x = -Math.PI;
-	var shape4 = shape1.clone();
-	shape4.position.y = -1000;
-	shape4.position.x = 1000;
-	shape4.rotation.x = -Math.PI;
-	shape4.rotation.y = -Math.PI;
-	shapeObjects.add(shape1);
-	shapeObjects.add(shape2);
-	shapeObjects.add(shape3);
-	shapeObjects.add(shape4);
-	shapeObjects.position.z=2000;
-	shapeObjects.position.x=-500;
-	shapeObjects.position.y=500;
-
-	// shapeObjects.lookAt(allObjects.position);
-
+	var allShape = addShape();
+	allShape.visible=false;
 	// renderer = new THREE.CSS3DRenderer();
 	// renderer.setSize(window.innerWidth, window.innerHeight);
 	renderer = new THREE.WebGLRenderer({
@@ -126,9 +104,14 @@ function init() {
 
 	}, false);
 
+	// transformShape(allShape, 4000);
 	transform(targets.sphere, 2000);
 	// transform(targets.sphere, 0);
 
+	setTimeout(function(){
+		allShape.visible=true;
+		transformShape(allShape, 4000);
+	},2000);
 	window.addEventListener('resize', onWindowResize, false);
 
 
@@ -353,7 +336,7 @@ function addGUI() {
 
 function createShapeObject(multi, color) {
 	multi = multi || 1;
-	color = color || Math.random()*0xffffff;
+	color = color || Math.random() * 0xffffff;
 	var geometry = new THREE.Geometry();
 	var material = new THREE.MeshBasicMaterial({
 		color: color,
@@ -374,6 +357,139 @@ function createShapeObject(multi, color) {
 	geometry.computeFaceNormals();
 	var shape = new THREE.Mesh(geometry, material);
 	return shape;
+}
+
+function addShape() {
+	var shapeGroup = new THREE.Object3D();
+	shapeGroup.position.set(0, 0, 0);
+	scene.add(shapeGroup);
+	var shapeObjects = new THREE.Object3D();
+	shapeObjects.position.z = 2000;
+	shapeObjects.position.x = -500;
+	shapeObjects.position.y = 500;
+	var shape1 = createShapeObject(30);
+	shape1.name = 'topleft';
+	var shape2 = shape1.clone();
+	shape2.name = 'topright';
+	shape2.position.x = 1000;
+	shape2.rotation.y = Math.PI;
+	var shape3 = shape1.clone();
+	shape3.name = 'bottomleft';
+	shape3.position.y = -1000;
+	shape3.rotation.x = -Math.PI;
+	var shape4 = shape1.clone();
+	shape4.name = 'bottomright';
+	shape4.position.y = -1000;
+	shape4.position.x = 1000;
+	shape4.rotation.x = -Math.PI;
+	shape4.rotation.y = -Math.PI;
+	shapeObjects.add(shape1);
+	shapeObjects.add(shape2);
+	shapeObjects.add(shape3);
+	shapeObjects.add(shape4);
+
+	var geometry = new THREE.PlaneBufferGeometry(800, 800, 0);
+	var material = new THREE.MeshBasicMaterial({
+		map: qqTexture,
+		transparent: true,
+		opacity:1
+	});
+	var cube = new THREE.Mesh(geometry, material);
+	cube.name = "center";
+	cube.position.x = 500;
+	cube.position.y = -500;
+	shapeObjects.add(cube);
+
+	shapeGroup.add(shapeObjects);
+
+	return shapeGroup;
+}
+
+function transformShape(targets, duration) {
+	// TWEEN.removeAll();
+	targets.rotation.z = -Math.PI / 4;
+	var shapeTargets = targets.children[0].children;
+	for (var i = 0; i < shapeTargets.length; i++) {
+		switch (shapeTargets[i].name) {
+			case "topleft":
+				shapeTargets[i].position.x = 400;
+				shapeTargets[i].position.y = -400;
+				var toTarget = {
+					'x': 0,
+					'y': 0
+				};
+				new TWEEN.Tween(shapeTargets[i].position).to({
+						x: toTarget.x,
+						y: toTarget.y
+					}, duration / 2).easing(TWEEN.Easing.Exponential.Out)
+					.start();
+				break;
+			case "topright":
+				// console.log(shapeTargets[i].position);
+				shapeTargets[i].position.x = 940;
+				shapeTargets[i].position.y = -60;
+				var toTarget = {
+					'x': 1000,
+					'y': 0
+				};
+				new TWEEN.Tween(shapeTargets[i].position).to({
+						x: toTarget.x,
+						y: toTarget.y
+					}, duration / 2).easing(TWEEN.Easing.Exponential.Out)
+					.start();
+				break;
+			case "bottomleft":
+				console.log(shapeTargets[i].position);
+				shapeTargets[i].position.x = 60;
+				shapeTargets[i].position.y = -940;
+				var toTarget = {
+					'x': 0,
+					'y': -1000
+				};
+				new TWEEN.Tween(shapeTargets[i].position).to({
+						x: toTarget.x,
+						y: toTarget.y
+					}, duration / 2).easing(TWEEN.Easing.Exponential.Out)
+					.start();
+				break;
+			case "bottomright":
+				shapeTargets[i].position.x = 600;
+				shapeTargets[i].position.y = -600;
+				var toTarget = {
+					'x': 1000,
+					'y': -1000
+				};
+				new TWEEN.Tween(shapeTargets[i].position).to({
+						x: toTarget.x,
+						y: toTarget.y
+					}, duration / 2).easing(TWEEN.Easing.Exponential.Out)
+					.start();
+				break;
+			case "center":
+				// shapeTargets[i].visible = false;
+				shapeTargets[i].material.opacity = 0;
+				console.log(shapeTargets[i]);
+				new TWEEN.Tween(shapeTargets[i].material).to({opacity:1}, duration / 3).delay(duration/3).easing(TWEEN.Easing.Exponential.Out)
+					.start();
+				break;
+		}
+	}
+	new TWEEN.Tween(targets.rotation).to({
+			z: 0
+		}, duration / 2).easing(TWEEN.Easing.Exponential.InOut)
+		.start();
+
+	// allShape.children[0].children[0].position;
+
+	// tween.onUpdate(function() {
+	// 	console.log(this.x);
+	// });
+	// console.log(this);
+	new TWEEN.Tween(this)
+		.to({}, duration * 2)
+		.onUpdate(render)
+		.start();
+
 }
 
 function initStats() {
