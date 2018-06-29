@@ -58,6 +58,30 @@ function init() {
 	addObjects();
 	//addGUI
 	addGUI();
+	//create shape object
+	var shapeObjects = new THREE.Object3D();
+	scene.add(shapeObjects);
+	var shape1 = createShapeObject(30);
+	var shape2 = shape1.clone();
+	shape2.position.x = 1000;
+	shape2.rotation.y = Math.PI;
+	var shape3 = shape1.clone();
+	shape3.position.y = -1000;
+	shape3.rotation.x = -Math.PI;
+	var shape4 = shape1.clone();
+	shape4.position.y = -1000;
+	shape4.position.x = 1000;
+	shape4.rotation.x = -Math.PI;
+	shape4.rotation.y = -Math.PI;
+	shapeObjects.add(shape1);
+	shapeObjects.add(shape2);
+	shapeObjects.add(shape3);
+	shapeObjects.add(shape4);
+	shapeObjects.position.z=2000;
+	shapeObjects.position.x=-500;
+	shapeObjects.position.y=500;
+
+	// shapeObjects.lookAt(allObjects.position);
 
 	// renderer = new THREE.CSS3DRenderer();
 	// renderer.setSize(window.innerWidth, window.innerHeight);
@@ -325,6 +349,31 @@ function addGUI() {
 	qqGui.add(guiControls, 'qqR', 0, 3000);
 	qqGui.add(guiControls, 'qqSpeed', 0, 200);
 	qqGui.add(guiControls, 'qqY', -1000, 1000);
+}
+
+function createShapeObject(multi, color) {
+	multi = multi || 1;
+	color = color || Math.random()*0xffffff;
+	var geometry = new THREE.Geometry();
+	var material = new THREE.MeshBasicMaterial({
+		color: color,
+		// wireframe: true,
+		vertexColors: THREE.FaceColors,
+		side: THREE.DoubleSide
+	});
+	geometry.vertices.push(new THREE.Vector3(0, 0, 0));
+	geometry.vertices.push(new THREE.Vector3(10 * multi, 0, 0));
+	geometry.vertices.push(new THREE.Vector3(10 * multi, -1 * multi, 0));
+	geometry.vertices.push(new THREE.Vector3(1 * multi, -1 * multi, 0));
+	geometry.vertices.push(new THREE.Vector3(1 * multi, -10 * multi, 0));
+	geometry.vertices.push(new THREE.Vector3(0, -10 * multi, 0));
+	geometry.faces.push(new THREE.Face3(0, 1, 2));
+	geometry.faces.push(new THREE.Face3(2, 3, 0));
+	geometry.faces.push(new THREE.Face3(3, 4, 5));
+	geometry.faces.push(new THREE.Face3(3, 5, 0));
+	geometry.computeFaceNormals();
+	var shape = new THREE.Mesh(geometry, material);
+	return shape;
 }
 
 function initStats() {
