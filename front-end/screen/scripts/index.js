@@ -110,7 +110,7 @@ function init() {
 
 	setTimeout(function(){
 		allShape.visible=true;
-		transformShape(allShape, 4000);
+		transformShape(allShape, 2500);
 	},2000);
 	window.addEventListener('resize', onWindowResize, false);
 
