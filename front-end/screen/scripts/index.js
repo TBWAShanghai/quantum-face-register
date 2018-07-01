@@ -31,10 +31,20 @@ var githubTexture = loader.load('./images/icons8-github.png');
 var googleTexture = loader.load('./images/icons8-google.png');
 var qqTexture = loader.load('./images/icons8-qq.png');
 
+// var fontloader = new THREE.FontLoader();
+// var font;
+// var font = fontloader.load('./images/helvetiker_bold.typeface.json');
+
 var allObjects;
 var stats = initStats();
 
 var guiControls;
+
+var cubeWorldPos = new THREE.Vector3();
+var targetWorldPos = new THREE.Vector3();
+var targetWorldQua = new THREE.Quaternion();
+
+var allShape;
 
 // init();
 // animate();
@@ -45,8 +55,10 @@ function init() {
 	camera.position.z = 4000;
 
 	scene = new THREE.Scene();
+	scene.updateMatrixWorld(true);
 
 	allObjects = new THREE.Object3D();
+	allObjects.updateMatrixWorld(true);
 
 	scene.add(allObjects);
 
@@ -59,8 +71,8 @@ function init() {
 	//addGUI
 	addGUI();
 	//create shape object
-	var allShape = addShape();
-	allShape.visible=false;
+	allShape = addShape();
+	allShape.visible = false;
 	// renderer = new THREE.CSS3DRenderer();
 	// renderer.setSize(window.innerWidth, window.innerHeight);
 	renderer = new THREE.WebGLRenderer({
@@ -108,10 +120,20 @@ function init() {
 	transform(targets.sphere, 2000);
 	// transform(targets.sphere, 0);
 
-	setTimeout(function(){
-		allShape.visible=true;
+	// var clone = allShape.children[0].children[4].clone();
+	// clone.name = "clone";
+	// clone.position.set(500, -500, 0);
+	// console.log(clone);
+	// scene.add(clone);
+	setTimeout(function() {
 		transformShape(allShape, 2500);
-	},2000);
+	}, 2000);
+	var cube = allShape.children[0].children[4];
+	setTimeout(function() {
+		// transformTarget(cube, 2000);
+		transformTarget(allShape.children[0], 2000,240);
+	}, 3000)
+
 	window.addEventListener('resize', onWindowResize, false);
 
 
@@ -182,6 +204,7 @@ function addIcons() {
 
 	qq = new THREE.Mesh(new THREE.PlaneGeometry(200, 200, 0), new THREE.MeshBasicMaterial({
 		map: qqTexture,
+		side: THREE.DoubleSide,
 		transparent: true
 	}));
 	qqR = 1500;
@@ -194,16 +217,29 @@ function addIcons() {
 function addObjects() {
 	// table
 	for (var i = 0; i < count; i++) {
-
+		var material;
 		// var material=new THREE.MeshBasicMaterial({color:Math.random()*0xffffff,side:THREE.DoubleSide});
-		var material = new THREE.MeshBasicMaterial({
-			color: new THREE.Color(0, 127, 127),
-			side: THREE.DoubleSide,
-			opacity: 0.5,
-			transparent: true
-		});
+		if (i === 0) {
+			material = new THREE.MeshBasicMaterial({
+				color: new THREE.Color(0xffffff),
+				map: facebookTexture,
+				side: THREE.DoubleSide,
+				// opacity: 0.5,
+				transparent: true
+			});
+		} else {
+			material = new THREE.MeshBasicMaterial({
+				map: facebookTexture,
+				color: new THREE.Color(0, 127, 127),
+				// color: new THREE.Color(0xffffff),
+				side: THREE.DoubleSide,
+				opacity: 0.5,
+				transparent: true
+			});
+		}
 		var geometry = new THREE.PlaneBufferGeometry(100, 100);
 		var object = new THREE.Mesh(geometry, material);
+		object.updateMatrixWorld(true);
 
 		object.position.x = Math.random() * 4000 - 2000;
 		object.position.y = Math.random() * 4000 - 2000;
@@ -292,7 +328,7 @@ function addObjects() {
 function addGUI() {
 	guiControls = new function() {
 		this.rotationSpeed = 0.01;
-		this.allObjectsX = 45;
+		this.allObjectsX = Math.PI/4;
 		this.appleR = 1500;
 		this.appleSpeed = 11;
 		this.appleY = 0;
@@ -311,7 +347,7 @@ function addGUI() {
 	}
 	var gui = new dat.GUI();
 	gui.add(guiControls, 'rotationSpeed', 0, 1);
-	gui.add(guiControls, 'allObjectsX', 0, 1000);
+	gui.add(guiControls, 'allObjectsX', -Math.PI, Math.PI);
 	var appleGui = gui.addFolder("apple");
 	appleGui.add(guiControls, 'appleR', 0, 3000);
 	appleGui.add(guiControls, 'appleSpeed', 0, 200);
@@ -342,7 +378,9 @@ function createShapeObject(multi, color) {
 		color: color,
 		// wireframe: true,
 		vertexColors: THREE.FaceColors,
-		side: THREE.DoubleSide
+		side: THREE.DoubleSide,
+		transparent:true,
+		opacity:1
 	});
 	geometry.vertices.push(new THREE.Vector3(0, 0, 0));
 	geometry.vertices.push(new THREE.Vector3(10 * multi, 0, 0));
@@ -362,6 +400,7 @@ function createShapeObject(multi, color) {
 function addShape() {
 	var shapeGroup = new THREE.Object3D();
 	shapeGroup.position.set(0, 0, 0);
+	shapeGroup.updateMatrixWorld(true);
 	scene.add(shapeGroup);
 	var shapeObjects = new THREE.Object3D();
 	shapeObjects.position.z = 2000;
@@ -392,9 +431,10 @@ function addShape() {
 	var material = new THREE.MeshBasicMaterial({
 		map: qqTexture,
 		transparent: true,
-		opacity:1
+		opacity: 1
 	});
 	var cube = new THREE.Mesh(geometry, material);
+	cube.updateMatrixWorld(true);
 	cube.name = "center";
 	cube.position.x = 500;
 	cube.position.y = -500;
@@ -407,6 +447,8 @@ function addShape() {
 
 function transformShape(targets, duration) {
 	// TWEEN.removeAll();
+	allShape.visible = true;
+	targets.children[0].visible=true;
 	targets.rotation.z = -Math.PI / 4;
 	var shapeTargets = targets.children[0].children;
 	for (var i = 0; i < shapeTargets.length; i++) {
@@ -439,7 +481,7 @@ function transformShape(targets, duration) {
 					.start();
 				break;
 			case "bottomleft":
-				console.log(shapeTargets[i].position);
+				// console.log(shapeTargets[i].position);
 				shapeTargets[i].position.x = 60;
 				shapeTargets[i].position.y = -940;
 				var toTarget = {
@@ -468,8 +510,10 @@ function transformShape(targets, duration) {
 			case "center":
 				// shapeTargets[i].visible = false;
 				shapeTargets[i].material.opacity = 0;
-				console.log(shapeTargets[i]);
-				new TWEEN.Tween(shapeTargets[i].material).to({opacity:1}, duration / 3).delay(duration/3).easing(TWEEN.Easing.Exponential.Out)
+				// console.log(shapeTargets[i]);
+				new TWEEN.Tween(shapeTargets[i].material).to({
+						opacity: 1
+					}, duration / 3).delay(duration / 3).easing(TWEEN.Easing.Exponential.Out)
 					.start();
 				break;
 		}
@@ -479,17 +523,96 @@ function transformShape(targets, duration) {
 		}, duration / 2).easing(TWEEN.Easing.Exponential.InOut)
 		.start();
 
-	// allShape.children[0].children[0].position;
+}
 
-	// tween.onUpdate(function() {
-	// 	console.log(this.x);
-	// });
-	// console.log(this);
-	new TWEEN.Tween(this)
-		.to({}, duration * 2)
-		.onUpdate(render)
-		.start();
-
+function transformTarget(targets, duration,i) {
+	// target.getWorldPosition(cubeWorldPos);
+	i=i?i:200;
+	targets.visible=true;
+	objects[i].getWorldPosition(targetWorldPos);
+	targets.worldToLocal(targetWorldPos);
+	objects[i].getWorldQuaternion(targetWorldQua);
+	var target = targets.children[4];
+	var targetBorder = targets.children[0];
+	targetBorder.material.opacity=1;
+	target.visible=true;
+	// allShape.visible = true;
+	target.material.opacity=1;
+	console.log(targetWorldPos);
+	// new TWEEN.Tween(target).to({
+	// 		position: {
+	// 			x: targetWorldPos.x,
+	// 			y: targetWorldPos.y,
+	// 			z: targetWorldPos.z
+	// 		}
+	// 	}, duration).easing(TWEEN.Easing.Exponential.Out)
+	// 	.start();
+	// console.log(target);
+	// vector.copy(objects[200].position).multiplyScalar(2);
+	// target.lookAt(vector);
+	var reverseAnim=anime.timeline({
+		// loop: true
+		complete: function() {
+			allObjects.children[i].material.map = qqTexture;
+			allObjects.children[i].material.opacity = 1;
+			allObjects.children[i].material.color = new THREE.Color(0xffffff);
+			allObjects.children[i].material.needsUpdate = true;
+			reverseAnim.reset();
+			targets.visible=false;
+		}
+	}).add({
+		targets: target.scale,
+		x: 1 / 8,
+		y: 1 / 8,
+		z: 1 / 8,
+		duration: duration,
+		offset: 0,
+		easing: 'easeOutExpo'
+	}).add({
+		targets: target.position,
+		duration: duration,
+		x: targetWorldPos.x,
+		y: targetWorldPos.y,
+		z: targetWorldPos.z,
+		offset: 0,
+		easing: 'easeOutExpo',
+		update: function(anim) {
+			objects[i].getWorldPosition(targetWorldPos);
+			targets.worldToLocal(targetWorldPos);
+			// anim.animations[0].tweens[0].to.original=(targetWorldPos.x).toString();
+			anim.animations[0].tweens[0].to.numbers[0]=targetWorldPos.x;
+			// anim.animations[1].tweens[0].to.original=(targetWorldPos.y).toString();
+			anim.animations[1].tweens[0].to.numbers[0]=targetWorldPos.y;
+			// anim.animations[2].tweens[0].to.original=(targetWorldPos.z).toString();
+			anim.animations[2].tweens[0].to.numbers[0]=targetWorldPos.z;
+  		}
+	}).add({
+		targets: target.quaternion,
+		duration: duration,
+		x: targetWorldQua.x,
+		y: targetWorldQua.y,
+		z: targetWorldQua.z,
+		w: targetWorldQua.w,
+		offset: 0,
+		easing: 'easeOutExpo',
+		update: function(anim) {
+			objects[i].getWorldQuaternion(targetWorldQua);
+			// anim.animations[0].tweens[0].to.original=(targetWorldPos.x).toString();
+			anim.animations[0].tweens[0].to.numbers[0]=targetWorldQua.x;
+			// anim.animations[1].tweens[0].to.original=(targetWorldPos.y).toString();
+			anim.animations[1].tweens[0].to.numbers[0]=targetWorldQua.y;
+			// anim.animations[2].tweens[0].to.original=(targetWorldPos.z).toString();
+			anim.animations[2].tweens[0].to.numbers[0]=targetWorldQua.z;
+			anim.animations[3].tweens[0].to.numbers[0]=targetWorldQua.w;
+  		}
+	}).add({
+		targets: targetBorder.material,
+		duration: duration,
+		opacity: 0,
+		// offset: duration/3,
+		offset: 0,
+		easing: 'easeOutExpo'
+	});
 }
 
 function initStats() {
