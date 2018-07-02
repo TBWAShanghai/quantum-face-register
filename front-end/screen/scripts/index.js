@@ -115,23 +115,15 @@ function init() {
 	// transformShape(allShape, 4000);
 	transform(targets.sphere, 2000);
 	// transform(targets.sphere, 0);
-
-	// var clone = allShape.children[0].children[4].clone();
-	// clone.name = "clone";
-	// clone.position.set(500, -500, 0);
-	// console.log(clone);
-	// scene.add(clone);
 	setTimeout(function() {
 		transformShape(allShape, 2500);
 	}, 2000);
-	var cube = allShape.children[0].children[4];
 	setTimeout(function() {
 		// transformTarget(cube, 2000);
 		transformTarget(allShape.children[0], 2000, 240);
 	}, 3000)
 
 	window.addEventListener('resize', onWindowResize, false);
-
 
 	animate();
 
