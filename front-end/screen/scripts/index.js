@@ -446,90 +446,91 @@ function transformShape(targets, duration) {
 	targets.children[0].visible = true;
 	targets.rotation.z = -Math.PI / 4;
 	var shapeTargets = targets.children[0].children;
+	var toTarget0, toTarget1, toTarget2, toTarget3;
 	for (var i = 0; i < shapeTargets.length; i++) {
 		switch (shapeTargets[i].name) {
 			case "topleft":
 				shapeTargets[i].position.x = 400;
 				shapeTargets[i].position.y = -400;
-				var toTarget = {
+				toTarget0 = {
 					'x': 0,
 					'y': 0
 				};
-				anime({
-					targets: shapeTargets[i].position,
-					x: toTarget.x,
-					y: toTarget.y,
-					duration: duration / 2,
-					easing: 'easeOutExpo'
-				});
 				break;
 			case "topright":
-				// console.log(shapeTargets[i].position);
 				shapeTargets[i].position.x = 940;
 				shapeTargets[i].position.y = -60;
-				var toTarget = {
+				toTarget1 = {
 					'x': 1000,
 					'y': 0
 				};
-				anime({
-					targets: shapeTargets[i].position,
-					x: toTarget.x,
-					y: toTarget.y,
-					duration: duration / 2,
-					easing: 'easeOutExpo'
-				});
 				break;
 			case "bottomleft":
-				// console.log(shapeTargets[i].position);
 				shapeTargets[i].position.x = 60;
 				shapeTargets[i].position.y = -940;
-				var toTarget = {
+				toTarget2 = {
 					'x': 0,
 					'y': -1000
 				};
-				anime({
-					targets: shapeTargets[i].position,
-					x: toTarget.x,
-					y: toTarget.y,
-					duration: duration / 2,
-					easing: 'easeOutExpo'
-				});
 				break;
 			case "bottomright":
 				shapeTargets[i].position.x = 600;
 				shapeTargets[i].position.y = -600;
-				var toTarget = {
+				toTarget3 = {
 					'x': 1000,
 					'y': -1000
 				};
-				anime({
-					targets: shapeTargets[i].position,
-					x: toTarget.x,
-					y: toTarget.y,
-					duration: duration / 2,
-					easing: 'easeOutExpo'
-				});
 				break;
 			case "center":
-				// shapeTargets[i].visible = false;
 				shapeTargets[i].material.opacity = 0;
-				// console.log(shapeTargets[i]);
-				anime({
-					targets: shapeTargets[i].material,
-					opacity: 1,
-					duration: duration / 3,
-					delay: duration / 3,
-					easing: 'easeOutExpo'
-				});
 				break;
 		}
 	}
-	anime({
+
+	anime.timeline({
+
+	}).add({
+		targets: shapeTargets[0].position,
+		x: toTarget0.x,
+		y: toTarget0.y,
+		duration: duration / 2,
+		easing: 'easeOutExpo',
+		offset: 0
+	}).add({
+		targets: shapeTargets[1].position,
+		x: toTarget1.x,
+		y: toTarget1.y,
+		duration: duration / 2,
+		easing: 'easeOutExpo',
+		offset: 0
+	}).add({
+		targets: shapeTargets[2].position,
+		x: toTarget2.x,
+		y: toTarget2.y,
+		duration: duration / 2,
+		easing: 'easeOutExpo',
+		offset: 0
+	}).add({
+		targets: shapeTargets[3].position,
+		x: toTarget3.x,
+		y: toTarget3.y,
+		duration: duration / 2,
+		easing: 'easeOutExpo',
+		offset: 0
+	}).add({
+		targets: shapeTargets[4].material,
+		opacity: 1,
+		duration: duration / 3,
+		delay: duration / 3,
+		easing: 'easeOutExpo',
+		offset: 0
+	}).add({
 		targets: targets.rotation,
 		z: 0,
 		duration: duration / 2,
-		easing: 'easeInOutExpo'
-	});
+		easing: 'easeInOutExpo',
+		offset: 0
+	})
 
 }
 
@@ -630,7 +631,7 @@ function transform(targets, duration) {
 			x: target.position.x,
 			y: target.position.y,
 			z: target.position.z,
-			offset:0,
+			offset: 0,
 			easing: 'easeInOutExpo',
 		}).add({
 			targets: object.rotation,
@@ -638,7 +639,7 @@ function transform(targets, duration) {
 			x: target.rotation.x,
 			y: target.rotation.y,
 			z: target.rotation.z,
-			offset:0,
+			offset: 0,
 			easing: 'easeInOutExpo',
 		})
 
