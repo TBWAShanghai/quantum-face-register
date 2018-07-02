@@ -1,7 +1,10 @@
 ﻿ // var url = "http://localhost:3000/tencent/identify";
  // var url = "http://wechat.mynecis.cn/wx/tencent/identify";
  var url = "https://wechat.mynecis.cn/wx/tencent/identify";
+ var socketurl="ws://127.0.0.1:5500";
+ var confidence=10;
  window.onload = function() {
+   var socket = io.connect(socketurl);
    var video = document.getElementById('video');
    var canvas = document.getElementById('canvas');
    var context = canvas.getContext('2d');
@@ -20,10 +23,10 @@
      camera: true
    });
    // var radio = 4 / 3;
-   canvas.width=$("#video").width();
-   canvas.height = canvas.width / 3*4;
-     full.width = canvas.width;
-     full.height = canvas.height;
+   canvas.width = $("#video").width();
+   canvas.height = canvas.width / 3 * 4;
+   full.width = canvas.width;
+   full.height = canvas.height;
    var flag = true;
    var config = new function() {
      this.width = 230;
@@ -45,7 +48,7 @@
          // var rectY = rect.y;
          // console.log(rect.width);
          // console.log(full.toDataURL('image/jpeg'))
-         scContext.drawImage(full, rectX, rectY, rect.width+60, rect.height+60, 0, 0, shortCut.width, shortCut.width);
+         scContext.drawImage(full, rectX, rectY, rect.width + 60, rect.height + 60, 0, 0, shortCut.width, shortCut.width);
          // var base64 = full.toDataURL('image/jpeg');
          var base64 = shortCut.toDataURL('image/jpeg');
          sendPhoto(base64, rect);
@@ -85,12 +88,16 @@
        success: function(result) {
          // console.log(result);
          if (result.message == 'OK') {
-           if (result.data.candidates[0].confidence >= 75) {
+           if (result.data.candidates[0].confidence >= confidence) {
              // console.log("验证成功");
+             var message={
+              "img": photo
+             };
+             socket.emit("message", message);
              $(".success").show();
-             setTimeout(function(){
-              $(".info").hide();
-             },2000);
+             setTimeout(function() {
+               $(".info").hide();
+             }, 2000);
              // alert("验证成功");
            } else {
              // console.log("验证失败");

@@ -6,6 +6,19 @@ const path = require('path');
 const Config = require('./config.json');
 const port = process.env.PORT || Config.apiPort;
 
+const server = require('http').createServer(app);
+const io = require("socket.io")(server);
+io.on("connection", function (socket) {
+
+    console.log('socket connected!');
+
+    socket.on("message", function (obj) {
+        io.emit("message",obj);
+    });
+
+});
+server.listen(Config.socketPort);
+
 app.use(bodyParser.json({
 	limit: '50mb'
 }));

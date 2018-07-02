@@ -1,4 +1,7 @@
 var count = 300;
+var socketurl="ws://127.0.0.1:5500"
+var socket = io.connect(socketurl);
+var allFaces=[],faceCount=0,isAnimate=false;
 
 var camera, scene, renderer;
 var controls;
@@ -115,18 +118,44 @@ function init() {
 	// transformShape(allShape, 4000);
 	transform(targets.sphere, 2000);
 	// transform(targets.sphere, 0);
-	setTimeout(function() {
-		transformShape(allShape, 2500);
-	}, 2000);
-	setTimeout(function() {
-		// transformTarget(cube, 2000);
-		transformTarget(allShape.children[0], 2000, 240);
-	}, 3000)
+	// setTimeout(function() {
+	// 	transformShape(allShape, 2500);
+	// }, 2000);
+	// setTimeout(function() {
+	// 	// transformTarget(cube, 2000);
+	// 	transformTarget(allShape.children[0], 2000, 0);
+	// }, 3000)
+
+
+	socket.on("message", function(obj) {
+		addFaces(obj.img);
+		facesAni();
+    });
 
 	window.addEventListener('resize', onWindowResize, false);
 
 	animate();
 
+}
+
+var loaderface=new THREE.TextureLoader();
+function addFaces(img) {
+	faceCount++;
+	var texture=loaderface.load(img);
+	allFaces.push(texture);
+	console.log(allFaces);
+}
+
+function facesAni() {
+	if(isAnimate) return;
+	isAnimate=true;
+	allShape.children[0].children[4].material.map=allFaces[0];
+	allShape.children[0].children[4].material.needsUpdate=true;
+	transformShape(allShape, 2500);
+	setTimeout(function() {
+		// transformTarget(cube, 2000);
+		transformTarget(allShape.children[0], 2000, faceCount,true);
+	}, 3000);
 }
 
 
@@ -516,9 +545,9 @@ function transformShape(targets, duration) {
 
 }
 
-function transformTarget(targets, duration, i) {
+function transformTarget(targets, duration, i,flag) {
 	// target.getWorldPosition(cubeWorldPos);
-	i = i ? i : 200;
+	// i = i ? i : 200;
 	targets.visible = true;
 	objects[i].getWorldPosition(targetWorldPos);
 	targets.worldToLocal(targetWorldPos);
@@ -532,12 +561,19 @@ function transformTarget(targets, duration, i) {
 	var reverseAnim = anime.timeline({
 		// loop: true
 		complete: function() {
-			allObjects.children[i].material.map = qqTexture;
+			allObjects.children[i].material.map = allFaces[0];
 			allObjects.children[i].material.opacity = 1;
 			allObjects.children[i].material.color = new THREE.Color(0xffffff);
 			allObjects.children[i].material.needsUpdate = true;
 			reverseAnim.reset();
 			targets.visible = false;
+			if(flag){
+				isAnimate=false;
+				allFaces.shift();
+				if(allFaces.count>0){
+					facesAni();
+				}
+			}
 		}
 	}).add({
 		targets: target.scale,
