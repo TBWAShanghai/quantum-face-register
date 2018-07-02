@@ -61,7 +61,6 @@ router.post('/register', function(req, res) {
 	});
 });
 
-
 app.use('/', router);
 
 // 启动server // =========================================================

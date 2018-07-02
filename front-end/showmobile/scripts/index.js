@@ -19,12 +19,14 @@
    tracking.track('#video', tracker, {
      camera: true
    });
-   var radio = 9 / 16;
-   canvas.height = 480 / radio;
-   full.height = 480 / radio;
+   // var radio = 4 / 3;
+   canvas.width=$("#video").width();
+   canvas.height = canvas.width / 3*4;
+     full.width = canvas.width;
+     full.height = canvas.height;
    var flag = true;
    var config = new function() {
-     this.width = 200;
+     this.width = 230;
    }
    tracker.on('track', function(event) {
      context.clearRect(0, 0, canvas.width, canvas.height);
@@ -32,19 +34,20 @@
      if (event.data[0] && rect.width > config.width) {
 
        if (flag) {
-         console.log("拍照");
-         // alert("拍照");
-         // getPhoto();
+         // console.log("拍照");
          // shortCut.width = rect.width;
          // shortCut.height = rect.height;
          scContext.clearRect(0, 0, shortCut.width, shortCut.height);
          fullContext.drawImage(video, 0, 0, canvas.width, canvas.height);
-         var rectX = (rect.x - 50 > 0) ? (rect.x - 50) : 0;
-         var rectY = (rect.y - 50 > 0) ? (rect.y - 50) : 0;
+         var rectX = (rect.x - 30 > 0) ? (rect.x - 30) : 0;
+         var rectY = (rect.y - 30 > 0) ? (rect.y - 30) : 0;
+         // var rectX = rect.x;
+         // var rectY = rect.y;
          // console.log(rect.width);
          // console.log(full.toDataURL('image/jpeg'))
-         scContext.drawImage(full, rectX, rectY, rect.width + 100, rect.height + 100, 0, 0, shortCut.width, shortCut.width);
-         var base64 = full.toDataURL('image/jpeg');
+         scContext.drawImage(full, rectX, rectY, rect.width+60, rect.height+60, 0, 0, shortCut.width, shortCut.width);
+         // var base64 = full.toDataURL('image/jpeg');
+         var base64 = shortCut.toDataURL('image/jpeg');
          sendPhoto(base64, rect);
          flag = false;
          setTimeout(function() {
@@ -80,17 +83,21 @@
          img: photo.substring(photo.indexOf(",") + 1)
        },
        success: function(result) {
-         console.log(result);
+         // console.log(result);
          if (result.message == 'OK') {
            if (result.data.candidates[0].confidence >= 75) {
-             console.log("验证成功");
+             // console.log("验证成功");
+             $(".success").show();
+             setTimeout(function(){
+              $(".info").hide();
+             },2000);
              // alert("验证成功");
            } else {
-             console.log("验证失败");
+             // console.log("验证失败");
              // alert("验证失败");
            }
          } else {
-           alert("发送失败");
+           // alert("发送失败");
          }
 
        },
