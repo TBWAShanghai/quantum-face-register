@@ -215,24 +215,14 @@ function addObjects() {
 	for (var i = 0; i < count; i++) {
 		var material;
 		// var material=new THREE.MeshBasicMaterial({color:Math.random()*0xffffff,side:THREE.DoubleSide});
-		if (i === 0) {
-			material = new THREE.MeshBasicMaterial({
-				color: new THREE.Color(0xffffff),
-				map: facebookTexture,
-				side: THREE.DoubleSide,
-				// opacity: 0.5,
-				transparent: true
-			});
-		} else {
-			material = new THREE.MeshBasicMaterial({
-				map: facebookTexture,
-				color: new THREE.Color(0, 127, 127),
-				// color: new THREE.Color(0xffffff),
-				side: THREE.DoubleSide,
-				opacity: 0.5,
-				transparent: true
-			});
-		}
+		material = new THREE.MeshBasicMaterial({
+			// map: facebookTexture,
+			color: new THREE.Color(0, 127, 127),
+			// color: new THREE.Color(0xffffff),
+			side: THREE.DoubleSide,
+			opacity: 0.5,
+			transparent: true
+		});
 		var geometry = new THREE.PlaneBufferGeometry(100, 100);
 		var object = new THREE.Mesh(geometry, material);
 		object.updateMatrixWorld(true);
