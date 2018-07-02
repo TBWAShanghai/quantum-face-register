@@ -25,17 +25,19 @@
         win.addEventListener(resizeEvt, recalc, false);
         doc.addEventListener('DOMContentLoaded', recalc, false);
     })(document, window);
+
+    var openid = getUrlParameterByName('openid');
     function getUrlParameterByName(name) {
         name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
         var regex = new RegExp('[\\?&]' + name + '=([^&#]*)'),
             results = regex.exec(location.search);
         return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
     }
-    if(!getUrlParameterByName('openid')){
-        window.location.href="http://wechat.mynecis.cn/wx/wx/oauth/openid?url="+window.location.origin+window.location.pathname;
+    if (!openid) {
+        window.location.href = "https://wechat.mynecis.cn/wx/wx/oauth/openid?url=" + window.location.origin + window.location.pathname;
     }
     </script>
-    <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    <script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
 </head>
 
 <body>
@@ -71,14 +73,16 @@
                 电话：
             </div>
             <div class="right">
-                <input id="tel" type="phone" placeholder="请填写电话">
+                <input id="tel" type="phone" placeholder="请填写电话" maxlength="11">
             </div>
         </div>
         <div class="text-center">
             <button id="submit" class="btn btn-default btn-success submit">提交</button>
         </div>
+        <div id="check" class="title" style="display: none;color:red;">
+            你已经注册过！重新上传可以更换
+        </div>
     </div>
-
     <div class="top-box">
         <img src="images/003.gif" alt="">
     </div>

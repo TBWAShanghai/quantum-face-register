@@ -33,6 +33,16 @@ router.get('/', function(req, res) {
 	});
 });
 
+router.post('/check', function(req, res) {
+	Site.check(req, res).then((result) => {
+		res.json({
+			code: 200,
+			msg: "check return",
+			data: result
+		});
+	});
+});
+
 router.post('/register', function(req, res) {
 	Site.register(req, res).then((error) => {
 		if (error) {

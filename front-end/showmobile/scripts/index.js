@@ -1,6 +1,6 @@
 ﻿ // var url = "http://localhost:3000/tencent/identify";
  // var url = "http://wechat.mynecis.cn/wx/tencent/identify";
- var url = "http://wechat.mynecis.cn/wx/";
+ var url = "https://wechat.mynecis.cn/wx/tencent/identify";
  window.onload = function() {
    var video = document.getElementById('video');
    var canvas = document.getElementById('canvas');
@@ -19,7 +19,7 @@
    tracking.track('#video', tracker, {
      camera: true
    });
-   var radio = 9/16;
+   var radio = 9 / 16;
    canvas.height = 480 / radio;
    full.height = 480 / radio;
    var flag = true;
@@ -51,7 +51,7 @@
            flag = true;
          }, time);
        } else {
-         console.log("冷却中");
+         // console.log("冷却中");
        }
 
 
@@ -74,15 +74,15 @@
    function sendPhoto(photo, rec) {
      $.ajax({
        url: url,
-       type: "get",
+       type: "post",
        dataType: "json",
-       // data: {
-       //   img: photo.substring(photo.indexOf(",") + 1)
-       // },
+       data: {
+         img: photo.substring(photo.indexOf(",") + 1)
+       },
        success: function(result) {
          console.log(result);
          if (result.message == 'OK') {
-           if (result.data.candidates[0].confidence >= 70) {
+           if (result.data.candidates[0].confidence >= 75) {
              console.log("验证成功");
              // alert("验证成功");
            } else {
@@ -93,13 +93,10 @@
            alert("发送失败");
          }
 
+       },
+       error: function(error) {
+         console.log(error);
        }
-       // error: function(error) {
-       //   // alert(error);
-       //   // $("#error").html(error);
-       //   debug.log(error);
-       //   // document.body.appendChild(error);
-       // }
      });
    }
  };

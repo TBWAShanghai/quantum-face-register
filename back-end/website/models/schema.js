@@ -31,6 +31,10 @@ const schema = new Schema({
 	createTime: {
 		type: String,
 		default: getNow
+	},
+	updateTime: {
+		type: String,
+		default: getNow
 	}
 });
 

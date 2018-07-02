@@ -2,7 +2,8 @@
  * Created by necis on 2018/6/26.
  */
 var api = {
-    "upload": "http://localhost:5000/register"
+    "register": "http://localhost:5000/register",
+    "check": "http://localhost:5000/check"
 }
 var Mobile = {
     Android: function() {
@@ -36,8 +37,27 @@ var Mobile = {
 };
 
 $(function() {
+    var exist = false;
+    $.ajax({
+        url: api.check,
+        type: 'POST',
+        data: {
+            openid: openid,
+        },
+        success: function(e) {
+            console.log(e);
+            if (e.data) {
+                console.log('注册过');
+                exist = true;
+                $("#check").show();
+            }
+        },
+        error: function() {
+            alert('错误的网路环境！请联系管理人员！');
+        }
+    });
+
     var img;
-    var openid="abc";
     var IS_IOS = Mobile.iOS();
 
     var $page, $canvas, $handler, $confirm;
@@ -92,7 +112,7 @@ $(function() {
                     initImage(image, faceCallback, canvas, $confirm, $handler)
                 };
                 image.src = base64;
-                img=base64;
+                img = base64;
                 $photo.val('');
                 $profilepopup.show();
             };
@@ -111,7 +131,7 @@ $(function() {
         var name = $("#name").val();
         var tel = $("#tel").val();
         var id = openid;
-        if(!img){
+        if (!img) {
             alert("请上传图片");
             return false;
         }
@@ -124,29 +144,36 @@ $(function() {
             alert("请填写电话");
             return false;
         }
-        var json={
-                openid: id,
-                name: name,
-                tel: tel,
-                img: base64
-            };
-
-        console.log(json);
 
         $.ajax({
-            url: api.upload,
+            url: api.register,
             type: 'POST',
             data: {
                 openid: openid,
                 name: name,
                 tel: tel,
-                img: base64
+                img: base64,
+                exist: exist
             },
             beforeSend: function() {
                 $(".top-box").show();
             },
             success: function(e) {
                 $(".top-box").hide();
+                if(e.code==200){
+                    console.log('注册成功');
+                    $("#name").val('');
+                    $("#tel").val('');
+                    img=null;
+                    base64=null;
+                    $photo.val('');
+                    $confirmfaceimg.attr("src",'');
+                    exist=true;
+                    $("#check").show();
+                    alert("注册成功");
+                }else{
+                    alert("请上传正确的人脸");
+                }
             },
             error: function() {
                 $(".top-box").hide();
