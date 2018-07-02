@@ -31,10 +31,6 @@ var githubTexture = loader.load('./images/icons8-github.png');
 var googleTexture = loader.load('./images/icons8-google.png');
 var qqTexture = loader.load('./images/icons8-qq.png');
 
-// var fontloader = new THREE.FontLoader();
-// var font;
-// var font = fontloader.load('./images/helvetiker_bold.typeface.json');
-
 var allObjects;
 var stats = initStats();
 
@@ -131,7 +127,7 @@ function init() {
 	var cube = allShape.children[0].children[4];
 	setTimeout(function() {
 		// transformTarget(cube, 2000);
-		transformTarget(allShape.children[0], 2000,240);
+		transformTarget(allShape.children[0], 2000, 240);
 	}, 3000)
 
 	window.addEventListener('resize', onWindowResize, false);
@@ -328,7 +324,7 @@ function addObjects() {
 function addGUI() {
 	guiControls = new function() {
 		this.rotationSpeed = 0.01;
-		this.allObjectsX = Math.PI/4;
+		this.allObjectsX = Math.PI / 4;
 		this.appleR = 1500;
 		this.appleSpeed = 11;
 		this.appleY = 0;
@@ -379,8 +375,8 @@ function createShapeObject(multi, color) {
 		// wireframe: true,
 		vertexColors: THREE.FaceColors,
 		side: THREE.DoubleSide,
-		transparent:true,
-		opacity:1
+		transparent: true,
+		opacity: 1
 	});
 	geometry.vertices.push(new THREE.Vector3(0, 0, 0));
 	geometry.vertices.push(new THREE.Vector3(10 * multi, 0, 0));
@@ -446,9 +442,8 @@ function addShape() {
 }
 
 function transformShape(targets, duration) {
-	// TWEEN.removeAll();
 	allShape.visible = true;
-	targets.children[0].visible=true;
+	targets.children[0].visible = true;
 	targets.rotation.z = -Math.PI / 4;
 	var shapeTargets = targets.children[0].children;
 	for (var i = 0; i < shapeTargets.length; i++) {
@@ -460,11 +455,13 @@ function transformShape(targets, duration) {
 					'x': 0,
 					'y': 0
 				};
-				new TWEEN.Tween(shapeTargets[i].position).to({
-						x: toTarget.x,
-						y: toTarget.y
-					}, duration / 2).easing(TWEEN.Easing.Exponential.Out)
-					.start();
+				anime({
+					targets: shapeTargets[i].position,
+					x: toTarget.x,
+					y: toTarget.y,
+					duration: duration / 2,
+					easing: 'easeOutExpo'
+				});
 				break;
 			case "topright":
 				// console.log(shapeTargets[i].position);
@@ -474,11 +471,13 @@ function transformShape(targets, duration) {
 					'x': 1000,
 					'y': 0
 				};
-				new TWEEN.Tween(shapeTargets[i].position).to({
-						x: toTarget.x,
-						y: toTarget.y
-					}, duration / 2).easing(TWEEN.Easing.Exponential.Out)
-					.start();
+				anime({
+					targets: shapeTargets[i].position,
+					x: toTarget.x,
+					y: toTarget.y,
+					duration: duration / 2,
+					easing: 'easeOutExpo'
+				});
 				break;
 			case "bottomleft":
 				// console.log(shapeTargets[i].position);
@@ -488,11 +487,13 @@ function transformShape(targets, duration) {
 					'x': 0,
 					'y': -1000
 				};
-				new TWEEN.Tween(shapeTargets[i].position).to({
-						x: toTarget.x,
-						y: toTarget.y
-					}, duration / 2).easing(TWEEN.Easing.Exponential.Out)
-					.start();
+				anime({
+					targets: shapeTargets[i].position,
+					x: toTarget.x,
+					y: toTarget.y,
+					duration: duration / 2,
+					easing: 'easeOutExpo'
+				});
 				break;
 			case "bottomright":
 				shapeTargets[i].position.x = 600;
@@ -501,56 +502,51 @@ function transformShape(targets, duration) {
 					'x': 1000,
 					'y': -1000
 				};
-				new TWEEN.Tween(shapeTargets[i].position).to({
-						x: toTarget.x,
-						y: toTarget.y
-					}, duration / 2).easing(TWEEN.Easing.Exponential.Out)
-					.start();
+				anime({
+					targets: shapeTargets[i].position,
+					x: toTarget.x,
+					y: toTarget.y,
+					duration: duration / 2,
+					easing: 'easeOutExpo'
+				});
 				break;
 			case "center":
 				// shapeTargets[i].visible = false;
 				shapeTargets[i].material.opacity = 0;
 				// console.log(shapeTargets[i]);
-				new TWEEN.Tween(shapeTargets[i].material).to({
-						opacity: 1
-					}, duration / 3).delay(duration / 3).easing(TWEEN.Easing.Exponential.Out)
-					.start();
+				anime({
+					targets: shapeTargets[i].material,
+					opacity: 1,
+					duration: duration / 3,
+					delay: duration / 3,
+					easing: 'easeOutExpo'
+				});
 				break;
 		}
 	}
-	new TWEEN.Tween(targets.rotation).to({
-			z: 0
-		}, duration / 2).easing(TWEEN.Easing.Exponential.InOut)
-		.start();
+	anime({
+		targets: targets.rotation,
+		z: 0,
+		duration: duration / 2,
+		easing: 'easeInOutExpo'
+	});
 
 }
 
-function transformTarget(targets, duration,i) {
+function transformTarget(targets, duration, i) {
 	// target.getWorldPosition(cubeWorldPos);
-	i=i?i:200;
-	targets.visible=true;
+	i = i ? i : 200;
+	targets.visible = true;
 	objects[i].getWorldPosition(targetWorldPos);
 	targets.worldToLocal(targetWorldPos);
 	objects[i].getWorldQuaternion(targetWorldQua);
 	var target = targets.children[4];
 	var targetBorder = targets.children[0];
-	targetBorder.material.opacity=1;
-	target.visible=true;
+	targetBorder.material.opacity = 1;
+	target.visible = true;
 	// allShape.visible = true;
-	target.material.opacity=1;
-	console.log(targetWorldPos);
-	// new TWEEN.Tween(target).to({
-	// 		position: {
-	// 			x: targetWorldPos.x,
-	// 			y: targetWorldPos.y,
-	// 			z: targetWorldPos.z
-	// 		}
-	// 	}, duration).easing(TWEEN.Easing.Exponential.Out)
-	// 	.start();
-	// console.log(target);
-	// vector.copy(objects[200].position).multiplyScalar(2);
-	// target.lookAt(vector);
-	var reverseAnim=anime.timeline({
+	target.material.opacity = 1;
+	var reverseAnim = anime.timeline({
 		// loop: true
 		complete: function() {
 			allObjects.children[i].material.map = qqTexture;
@@ -558,7 +554,7 @@ function transformTarget(targets, duration,i) {
 			allObjects.children[i].material.color = new THREE.Color(0xffffff);
 			allObjects.children[i].material.needsUpdate = true;
 			reverseAnim.reset();
-			targets.visible=false;
+			targets.visible = false;
 		}
 	}).add({
 		targets: target.scale,
@@ -579,13 +575,10 @@ function transformTarget(targets, duration,i) {
 		update: function(anim) {
 			objects[i].getWorldPosition(targetWorldPos);
 			targets.worldToLocal(targetWorldPos);
-			// anim.animations[0].tweens[0].to.original=(targetWorldPos.x).toString();
-			anim.animations[0].tweens[0].to.numbers[0]=targetWorldPos.x;
-			// anim.animations[1].tweens[0].to.original=(targetWorldPos.y).toString();
-			anim.animations[1].tweens[0].to.numbers[0]=targetWorldPos.y;
-			// anim.animations[2].tweens[0].to.original=(targetWorldPos.z).toString();
-			anim.animations[2].tweens[0].to.numbers[0]=targetWorldPos.z;
-  		}
+			anim.animations[0].tweens[0].to.numbers[0] = targetWorldPos.x;
+			anim.animations[1].tweens[0].to.numbers[0] = targetWorldPos.y;
+			anim.animations[2].tweens[0].to.numbers[0] = targetWorldPos.z;
+		}
 	}).add({
 		targets: target.quaternion,
 		duration: duration,
@@ -597,19 +590,15 @@ function transformTarget(targets, duration,i) {
 		easing: 'easeOutExpo',
 		update: function(anim) {
 			objects[i].getWorldQuaternion(targetWorldQua);
-			// anim.animations[0].tweens[0].to.original=(targetWorldPos.x).toString();
-			anim.animations[0].tweens[0].to.numbers[0]=targetWorldQua.x;
-			// anim.animations[1].tweens[0].to.original=(targetWorldPos.y).toString();
-			anim.animations[1].tweens[0].to.numbers[0]=targetWorldQua.y;
-			// anim.animations[2].tweens[0].to.original=(targetWorldPos.z).toString();
-			anim.animations[2].tweens[0].to.numbers[0]=targetWorldQua.z;
-			anim.animations[3].tweens[0].to.numbers[0]=targetWorldQua.w;
-  		}
+			anim.animations[0].tweens[0].to.numbers[0] = targetWorldQua.x;
+			anim.animations[1].tweens[0].to.numbers[0] = targetWorldQua.y;
+			anim.animations[2].tweens[0].to.numbers[0] = targetWorldQua.z;
+			anim.animations[3].tweens[0].to.numbers[0] = targetWorldQua.w;
+		}
 	}).add({
 		targets: targetBorder.material,
 		duration: duration,
 		opacity: 0,
-		// offset: duration/3,
 		offset: 0,
 		easing: 'easeOutExpo'
 	});
@@ -628,37 +617,32 @@ function initStats() {
 
 function transform(targets, duration) {
 
-	TWEEN.removeAll();
-
 	for (var i = 0; i < objects.length; i++) {
 
 		var object = objects[i];
 		var target = targets[i];
 
-		new TWEEN.Tween(object.position)
-			.to({
-				x: target.position.x,
-				y: target.position.y,
-				z: target.position.z
-			}, Math.random() * duration + duration)
-			.easing(TWEEN.Easing.Exponential.InOut)
-			.start();
+		anime.timeline({
 
-		new TWEEN.Tween(object.rotation)
-			.to({
-				x: target.rotation.x,
-				y: target.rotation.y,
-				z: target.rotation.z
-			}, Math.random() * duration + duration)
-			.easing(TWEEN.Easing.Exponential.InOut)
-			.start();
+		}).add({
+			targets: object.position,
+			duration: Math.random() * duration + duration,
+			x: target.position.x,
+			y: target.position.y,
+			z: target.position.z,
+			offset:0,
+			easing: 'easeInOutExpo',
+		}).add({
+			targets: object.rotation,
+			duration: Math.random() * duration + duration,
+			x: target.rotation.x,
+			y: target.rotation.y,
+			z: target.rotation.z,
+			offset:0,
+			easing: 'easeInOutExpo',
+		})
 
 	}
-
-	new TWEEN.Tween(this)
-		.to({}, duration * 2)
-		.onUpdate(render)
-		.start();
 
 }
 
@@ -714,8 +698,6 @@ function animate() {
 	qq.position.x = qqR * Math.cos(qqTheta);
 	qq.position.y = guiControls.qqY * Math.cos(qqTheta);
 	qq.position.z = qqR * Math.sin(qqTheta);
-
-	TWEEN.update();
 
 	controls.update();
 
