@@ -3,7 +3,7 @@
  var url = "https://wechat.mynecis.cn/wx/tencent/identify";
  // var socketurl="ws://127.0.0.1:5500";
  var socketurl="wss://wechat.mynecis.cn";
- var confidence=10;
+ var confidence=60;
  window.onload = function() {
    var socket = io.connect(socketurl,{
     path: '/facesocket/socket.io'
