@@ -1,5 +1,5 @@
 var count = 300;
-var offsetWidth=600;
+var offsetWidth = 600;
 // var socketurl = "ws://127.0.0.1:5500";
 // var url = "http://localhost:5000/signed";
 var socketurl = "wss://wechat.mynecis.cn";
@@ -65,6 +65,28 @@ var allShape;
 
 // init();
 // animate();
+
+imageLoad('./images/ani.jpg', imageCanvas);
+
+function imageLoad(src, callback) {
+	var img = new Image();
+	img.src = src;
+	img.onload = function() {
+		callback && callback(img);
+	}
+}
+
+function imageCanvas(img) {
+	var canvas = document.createElement('canvas');
+	canvas.width = img.width;
+	canvas.height = img.height;
+	var ctx=canvas.getContext("2d");
+	ctx.drawImage(img,0,0,canvas.width,canvas.height);
+	// document.body.appendChild(canvas);
+	// ctx.save();
+	var data= ctx.getImageData(0, 0, canvas.width, canvas.height);
+	console.log(data);
+}
 
 function init() {
 
@@ -629,11 +651,11 @@ function transformShape(targets, duration, flag) {
 		offset: 0
 	}).add({
 		targets: shapeTargets[0].position,
-		x: toTarget0.x-offsetWidth,
-		y: toTarget0.y+offsetWidth,
+		x: toTarget0.x - offsetWidth,
+		y: toTarget0.y + offsetWidth,
 		duration: duration / 2,
 		easing: 'easeOutExpo',
-		offset: duration/2
+		offset: duration / 2
 	}).add({
 		targets: shapeTargets[1].position,
 		x: toTarget1.x,
@@ -643,11 +665,11 @@ function transformShape(targets, duration, flag) {
 		offset: 0
 	}).add({
 		targets: shapeTargets[1].position,
-		x: toTarget1.x+offsetWidth,
-		y: toTarget1.y+offsetWidth,
+		x: toTarget1.x + offsetWidth,
+		y: toTarget1.y + offsetWidth,
 		duration: duration / 2,
 		easing: 'easeOutExpo',
-		offset: duration/2
+		offset: duration / 2
 	}).add({
 		targets: shapeTargets[2].position,
 		x: toTarget2.x,
@@ -657,11 +679,11 @@ function transformShape(targets, duration, flag) {
 		offset: 0
 	}).add({
 		targets: shapeTargets[2].position,
-		x: toTarget2.x-offsetWidth,
-		y: toTarget2.y-offsetWidth,
+		x: toTarget2.x - offsetWidth,
+		y: toTarget2.y - offsetWidth,
 		duration: duration / 2,
 		easing: 'easeOutExpo',
-		offset: duration/2
+		offset: duration / 2
 	}).add({
 		targets: shapeTargets[3].position,
 		x: toTarget3.x,
@@ -671,11 +693,11 @@ function transformShape(targets, duration, flag) {
 		offset: 0
 	}).add({
 		targets: shapeTargets[3].position,
-		x: toTarget3.x+offsetWidth,
-		y: toTarget3.y-offsetWidth,
+		x: toTarget3.x + offsetWidth,
+		y: toTarget3.y - offsetWidth,
 		duration: duration / 2,
 		easing: 'easeOutExpo',
-		offset: duration/2
+		offset: duration / 2
 	}).add({
 		targets: shapeTargets[4].material,
 		opacity: 1,
