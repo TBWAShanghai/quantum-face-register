@@ -1,9 +1,10 @@
 var count = 300;
-var socketurl = "ws://127.0.0.1:5500";
-var url = "http://localhost:5000/signed";
-// var socketurl="wss://wechat.mynecis.cn";
+// var socketurl = "ws://127.0.0.1:5500";
+// var url = "http://localhost:5000/signed";
+var socketurl = "wss://wechat.mynecis.cn";
+var url = "/faceapi/signed";
 var socket = io.connect(socketurl, {
-	// path: '/facesocket/socket.io'
+	path: '/facesocket/socket.io'
 });
 var allNums = [],
 	existArr = [],
@@ -150,8 +151,9 @@ function init() {
 
 
 	socket.on("message", function(obj) {
-		addFaces(obj.img);
-		facesAni();
+		console.log("收到消息");
+		addFaces(obj.img, facesAni);
+		// facesAni();
 	});
 
 	window.addEventListener('resize', onWindowResize, false);
@@ -162,10 +164,13 @@ function init() {
 
 var loaderface = new THREE.TextureLoader();
 
-function addFaces(img) {
-	var texture = loaderface.load(img);
-	allFaces.push(texture);
-	console.log(allFaces);
+function addFaces(img, callback) {
+	loaderface.load(img, function(texture) {
+		// body...
+		console.log(texture);
+		allFaces.push(texture);
+		callback && callback();
+	});
 }
 
 function addExitsFaces() {
@@ -215,6 +220,7 @@ function facesAni() {
 
 function freeTimeAni() {
 	if (isAnimate) return;
+	isAnimate = true;
 	var rdm = Math.floor(Math.random() * 5);
 	var texture;
 	switch (rdm) {
@@ -236,9 +242,9 @@ function freeTimeAni() {
 	}
 	allShape.children[0].children[4].material.map = texture;
 	allShape.children[0].children[4].material.needsUpdate = true;
-	setTimeout(function(){
+	setTimeout(function() {
 		transformShape(allShape, 2500, true);
-	},2000);
+	}, 2000);
 
 }
 
@@ -542,8 +548,9 @@ function transformShape(targets, duration, flag) {
 	// targets.children[0].material.opacity = 1;
 	targets.rotation.z = -Math.PI / 4;
 	var shapeTargets = targets.children[0].children;
-	shapeTargets[4].material.opacity=1;
-	shapeTargets[0].material.opacity=1;
+	shapeTargets[0].material.color = new THREE.Color(Math.random() * 0xffffff);
+	shapeTargets[4].material.opacity = 1;
+	shapeTargets[0].material.opacity = 1;
 	var toTarget0, toTarget1, toTarget2, toTarget3;
 	for (var i = 0; i < shapeTargets.length; i++) {
 		switch (shapeTargets[i].name) {
@@ -593,7 +600,9 @@ function transformShape(targets, duration, flag) {
 						isAnimate = false;
 						allShape.visible = false;
 						reverseAnim.reset();
-						if (allFaces.length <= 0) {
+						if (allFaces.length > 0) {
+							facesAni();
+						} else {
 							freeTimeAni();
 						}
 					}

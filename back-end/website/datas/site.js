@@ -46,46 +46,49 @@ module.exports.register = function(req, res) {
 		requestPost(url, JSON.stringify(pic)).then(function(data) {
 			let result = JSON.parse(data);
 			if (result.code == 0) {
-				if (result.data.ret_codes[0] == -1312) {
+				if (result.data && result.data.ret_codes && result.data.ret_codes[0] == -1312) {
 					//-1312对个体添加了相似度为99%及以上的人脸
 					let error = -1312;
 					resolve(error);
 					return false;
 				}
-				var img = './register/' + req.body.openid + '.jpg';
-				fs.writeFile(img, binaryData, 'binary', function(err) {
-					if (err) {
-						console.log(err);
-					}
-				});
-				if (exist == 'false') {
-					//存储数据到mongoogdb
-					let json = {
-						openid: req.body.openid,
-						name: req.body.name,
-						tel: req.body.tel,
-						img: '/register/' + req.body.openid + '.jpg'
-					}
-					model.create(json, function(error) {
-						resolve(error);
+				if (result.data && (result.data.added > 0 || result.data.suc_face > 0)) {
+					var img = './register/' + req.body.openid + '.jpg';
+					fs.writeFile(img, binaryData, 'binary', function(err) {
+						if (err) {
+							console.log(err);
+						}
 					});
-				} else {
-					//更新
-					var conditions = {
-						openid: req.body.openid
-					};
-
-					var update = {
-						$set: {
+					if (exist == 'false') {
+						//存储数据到mongoogdb
+						let json = {
+							openid: req.body.openid,
 							name: req.body.name,
 							tel: req.body.tel,
 							img: '/register/' + req.body.openid + '.jpg'
 						}
-					};
-					model.update(conditions, update, function(error) {
-						resolve(error);
-					});
+						model.create(json, function(error) {
+							resolve(error);
+						});
+					} else {
+						//更新
+						var conditions = {
+							openid: req.body.openid
+						};
+
+						var update = {
+							$set: {
+								name: req.body.name,
+								tel: req.body.tel,
+								img: '/register/' + req.body.openid + '.jpg'
+							}
+						};
+						model.update(conditions, update, function(error) {
+							resolve(error);
+						});
+					}
 				}
+
 			} else {
 				resolve(result);
 			}
@@ -151,14 +154,18 @@ module.exports.faceidentify = function(req, res) {
 									}
 								});
 
-								//存储数据到mongoogdb
-								let json = {
-									openid: jsonFind.openid,
-									faceimg: '/identify/' + req.body.openid + '.jpg',
-									signed: 'true',
-									facebase64: req.body.img
-								}
-								model.create(json, function(error) {
+								var conditions = {
+									openid: jsonFind.openid
+								};
+
+								var update = {
+									$set: {
+										faceimg: '/identify/' + jsonFind.openid + '.jpg',
+										signed: 'true',
+										facebase64: req.body.img
+									}
+								};
+								model.update(conditions, update, function(error) {
 									resolve(error);
 								});
 							}

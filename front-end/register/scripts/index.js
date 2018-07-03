@@ -1,14 +1,14 @@
 /**
  * Created by necis on 2018/6/26.
  */
-var api = {
-    "register": "http://localhost:5000/register",
-    "check": "http://localhost:5000/check"
-}
 // var api = {
-//     "register": "/faceapi/register",
-//     "check": "/faceapi/check"
+//     "register": "http://localhost:5000/register",
+//     "check": "http://localhost:5000/check"
 // }
+var api = {
+    "register": "/faceapi/register",
+    "check": "/faceapi/check"
+}
 var Mobile = {
     Android: function() {
         return navigator.userAgent.match(/Android/i) ? true : false;

@@ -1,11 +1,12 @@
-﻿var url = "http://localhost:5000/identify";
-var detecturl = "http://localhost:3000/tencent/detect";
-var socketurl = "ws://127.0.0.1:5500";
-// var url = "https://wechat.mynecis.cn/wx/tencent/identify";
-// var socketurl="wss://wechat.mynecis.cn";
+﻿// var url = "http://localhost:5000/identify";
+// var detecturl = "http://localhost:3000/tencent/detect";
+// var socketurl = "ws://127.0.0.1:5500";
+var url = "https://wechat.mynecis.cn/faceapi/identify";
+var detecturl = "https://wechat.mynecis.cn/wx/tencent/detect";
+var socketurl="wss://wechat.mynecis.cn";
 window.onload = function() {
   var socket = io.connect(socketurl, {
-    // path: '/facesocket/socket.io'
+    path: '/facesocket/socket.io'
   });
   var video = document.getElementById('video');
   var canvas = document.getElementById('canvas');
