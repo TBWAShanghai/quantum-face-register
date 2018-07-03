@@ -33,21 +33,21 @@ https://wechat.mynecis.cn/face/showmobile/
 	  ├── register/							//注册
 	  |	├── images/ 						//图片
 	  |	├── index.html						//主文件
-	  |	├── styles 					//样式
+	  |	├── styles 							//样式
 	  |	└── scripts/						//脚本文件
 	  ├── screen/							//大屏
 	  |	├── images/ 						//图片
 	  |	├── index.html						//主文件
-	  |	├── styles 					//样式
-  	  |	├── libs/					//库文件
+	  |	├── styles 							//样式
+  	  |	├── libs/							//库文件
 	  |	└── scripts/						//脚本文件
 	  ├── showmobile/						//人脸识别手机
 	  |	├── index.html						//主文件
-	  |	├── styles 					//样式
+	  |	├── styles 							//样式
 	  |	└── scripts/						//脚本文件
   	  └── show/						        //人脸识别pc
 	  	├── index.html						//主文件
-	  	├── styles 					//样式
+	  	├── styles 							//样式
 	  	└── scripts/						//脚本文件
 
 ```
