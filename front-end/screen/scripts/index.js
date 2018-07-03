@@ -1,4 +1,5 @@
 var count = 300;
+var offsetWidth=600;
 // var socketurl = "ws://127.0.0.1:5500";
 // var url = "http://localhost:5000/signed";
 var socketurl = "wss://wechat.mynecis.cn";
@@ -143,9 +144,8 @@ function init() {
 	// setTimeout(function() {
 	// 	// transformTarget(cube, 2000);
 	// 	transformTarget(allShape.children[0], 2000, 0);
-	// }, 3000)
-	setTimeout(function(argument) {
-		// body...
+	// }, 4000)
+	setTimeout(function() {
 		freeTimeAni();
 	}, 2000);
 
@@ -153,7 +153,6 @@ function init() {
 	socket.on("message", function(obj) {
 		console.log("收到消息");
 		addFaces(obj.img, facesAni);
-		// facesAni();
 	});
 
 	window.addEventListener('resize', onWindowResize, false);
@@ -215,7 +214,7 @@ function facesAni() {
 	setTimeout(function() {
 		// transformTarget(cube, 2000);
 		transformTarget(allShape.children[0], 2000, calRandom(), true);
-	}, 3000);
+	}, 5000);
 }
 
 function freeTimeAni() {
@@ -629,12 +628,26 @@ function transformShape(targets, duration, flag) {
 		easing: 'easeOutExpo',
 		offset: 0
 	}).add({
+		targets: shapeTargets[0].position,
+		x: toTarget0.x-offsetWidth,
+		y: toTarget0.y+offsetWidth,
+		duration: duration / 2,
+		easing: 'easeOutExpo',
+		offset: duration/2
+	}).add({
 		targets: shapeTargets[1].position,
 		x: toTarget1.x,
 		y: toTarget1.y,
 		duration: duration / 2,
 		easing: 'easeOutExpo',
 		offset: 0
+	}).add({
+		targets: shapeTargets[1].position,
+		x: toTarget1.x+offsetWidth,
+		y: toTarget1.y+offsetWidth,
+		duration: duration / 2,
+		easing: 'easeOutExpo',
+		offset: duration/2
 	}).add({
 		targets: shapeTargets[2].position,
 		x: toTarget2.x,
@@ -643,12 +656,26 @@ function transformShape(targets, duration, flag) {
 		easing: 'easeOutExpo',
 		offset: 0
 	}).add({
+		targets: shapeTargets[2].position,
+		x: toTarget2.x-offsetWidth,
+		y: toTarget2.y-offsetWidth,
+		duration: duration / 2,
+		easing: 'easeOutExpo',
+		offset: duration/2
+	}).add({
 		targets: shapeTargets[3].position,
 		x: toTarget3.x,
 		y: toTarget3.y,
 		duration: duration / 2,
 		easing: 'easeOutExpo',
 		offset: 0
+	}).add({
+		targets: shapeTargets[3].position,
+		x: toTarget3.x+offsetWidth,
+		y: toTarget3.y-offsetWidth,
+		duration: duration / 2,
+		easing: 'easeOutExpo',
+		offset: duration/2
 	}).add({
 		targets: shapeTargets[4].material,
 		opacity: 1,
