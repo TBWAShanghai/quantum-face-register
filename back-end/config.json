@@ -2,5 +2,5 @@
 	"apiPort": "5000",
 	"socketPort": "5500",
 	"db": "mongodb://127.0.0.1:27017/faceregister",
-	"apiFace":"http://localhost:3000",
+	"apiFace":"http://localhost:3000"
 }
