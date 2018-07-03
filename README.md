@@ -1,4 +1,4 @@
-人脸签到（trakcing.js+three.js+anime.js）
+# 人脸签到（trakcing.js+three.js+anime.js）
 
 1. 微信注册： https://wechat.mynecis.cn/face/register
 
