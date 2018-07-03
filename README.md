@@ -28,26 +28,26 @@ https://wechat.mynecis.cn/face/showmobile/
 	| |	| └── schema.js 					//schema
 	| |	└── datas/						//获取数据
 	| |	  └──site.js 						//api function
-	| └── rigister 						    //注册图片
+	| └── rigister 						    	//注册图片
 	└── front-end/							//前端文件
 	  ├── register/							//注册
 	  |	├── images/ 						//图片
 	  |	├── index.html						//主文件
-	  |	├── styles 							//样式
+	  |	├── styles 					//样式
 	  |	└── scripts/						//脚本文件
 	  ├── screen/							//大屏
 	  |	├── images/ 						//图片
 	  |	├── index.html						//主文件
-	  |	├── styles 							//样式
-  	  |	├── libs/							//库文件
+	  |	├── styles 					//样式
+  	  |	├── libs/					//库文件
 	  |	└── scripts/						//脚本文件
 	  ├── showmobile/						//人脸识别手机
 	  |	├── index.html						//主文件
-	  |	├── styles 							//样式
+	  |	├── styles 					//样式
 	  |	└── scripts/						//脚本文件
   	  └── show/						        //人脸识别pc
 	  	├── index.html						//主文件
-	  	├── styles 							//样式
+	  	├── styles 					//样式
 	  	└── scripts/						//脚本文件
 
 ```
