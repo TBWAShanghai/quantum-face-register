@@ -143,6 +143,10 @@ function init() {
 	// 	// transformTarget(cube, 2000);
 	// 	transformTarget(allShape.children[0], 2000, 0);
 	// }, 3000)
+	setTimeout(function(argument) {
+		// body...
+		freeTimeAni();
+	}, 2000);
 
 
 	socket.on("message", function(obj) {
@@ -174,7 +178,7 @@ function addExitsFaces() {
 			if (result.code == 200 && result.data) {
 				existArr = result.data;
 				for (var i = 0; i < existArr.length; i++) {
-					var random=calRandom();
+					var random = calRandom();
 					var base64 = "data:image/jpeg;base64," + existArr[i].facebase64;
 					var texture = loaderface.load(base64);
 					allObjects.children[random].material.map = texture;
@@ -207,6 +211,35 @@ function facesAni() {
 		// transformTarget(cube, 2000);
 		transformTarget(allShape.children[0], 2000, calRandom(), true);
 	}, 3000);
+}
+
+function freeTimeAni() {
+	if (isAnimate) return;
+	var rdm = Math.floor(Math.random() * 5);
+	var texture;
+	switch (rdm) {
+		case 0:
+			texture = qqTexture
+			break;
+		case 1:
+			texture = facebookTexture
+			break;
+		case 2:
+			texture = githubTexture;
+			break;
+		case 3:
+			texture = githubTexture;
+			break;
+		case 4:
+			texture = googleTexture;
+			break;
+	}
+	allShape.children[0].children[4].material.map = texture;
+	allShape.children[0].children[4].material.needsUpdate = true;
+	setTimeout(function(){
+		transformShape(allShape, 2500, true);
+	},2000);
+
 }
 
 
@@ -503,11 +536,14 @@ function addShape() {
 	return shapeGroup;
 }
 
-function transformShape(targets, duration) {
+function transformShape(targets, duration, flag) {
 	allShape.visible = true;
 	targets.children[0].visible = true;
+	// targets.children[0].material.opacity = 1;
 	targets.rotation.z = -Math.PI / 4;
 	var shapeTargets = targets.children[0].children;
+	shapeTargets[4].material.opacity=1;
+	shapeTargets[0].material.opacity=1;
 	var toTarget0, toTarget1, toTarget2, toTarget3;
 	for (var i = 0; i < shapeTargets.length; i++) {
 		switch (shapeTargets[i].name) {
@@ -549,8 +585,33 @@ function transformShape(targets, duration) {
 		}
 	}
 
-	anime.timeline({
-
+	var reverseAnim = anime.timeline({
+		complete: function() {
+			if (flag) {
+				anime.timeline({
+					complete: function() {
+						isAnimate = false;
+						allShape.visible = false;
+						reverseAnim.reset();
+						if (allFaces.length <= 0) {
+							freeTimeAni();
+						}
+					}
+				}).add({
+					targets: shapeTargets[4].material,
+					opacity: 0,
+					duration: duration / 3,
+					easing: 'easeOutExpo',
+					offset: 0
+				}).add({
+					targets: shapeTargets[0].material,
+					opacity: 0,
+					duration: duration / 3,
+					easing: 'easeOutExpo',
+					offset: 0
+				});
+			}
+		}
 	}).add({
 		targets: shapeTargets[0].position,
 		x: toTarget0.x,
@@ -621,8 +682,10 @@ function transformTarget(targets, duration, i, flag) {
 			if (flag) {
 				isAnimate = false;
 				allFaces.shift();
-				if (allFaces.count > 0) {
+				if (allFaces.length > 0) {
 					facesAni();
+				} else {
+					freeTimeAni();
 				}
 			}
 		}
