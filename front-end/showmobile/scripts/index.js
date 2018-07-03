@@ -1,10 +1,13 @@
 ﻿ // var url = "http://localhost:3000/tencent/identify";
  // var url = "http://wechat.mynecis.cn/wx/tencent/identify";
  var url = "https://wechat.mynecis.cn/wx/tencent/identify";
- var socketurl="ws://127.0.0.1:5500";
+ // var socketurl="ws://127.0.0.1:5500";
+ var socketurl="wss://wechat.mynecis.cn";
  var confidence=10;
  window.onload = function() {
-   var socket = io.connect(socketurl);
+   var socket = io.connect(socketurl,{
+    path: '/facesocket/socket.io'
+  });
    var video = document.getElementById('video');
    var canvas = document.getElementById('canvas');
    var context = canvas.getContext('2d');
@@ -29,7 +32,7 @@
    full.height = canvas.height;
    var flag = true;
    var config = new function() {
-     this.width = 230;
+     this.width = 200;
    }
    tracker.on('track', function(event) {
      context.clearRect(0, 0, canvas.width, canvas.height);

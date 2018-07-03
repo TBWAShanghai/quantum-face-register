@@ -1,6 +1,9 @@
 var count = 300;
-var socketurl="ws://127.0.0.1:5500"
-var socket = io.connect(socketurl);
+// var socketurl="ws://127.0.0.1:5500";
+var socketurl="wss://wechat.mynecis.cn";
+var socket = io.connect(socketurl,{
+  path: '/facesocket/socket.io'
+});
 var allFaces=[],faceCount=0,isAnimate=false;
 
 var camera, scene, renderer;
