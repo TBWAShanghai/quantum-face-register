@@ -52,18 +52,38 @@ canvas
     z-index: 2;
 }
 
-.info{
+.info
+{
+    font-size: .5rem;
+
     position: absolute;
-    width: 100%;
-    text-align: center;
-    font-size: 0.5rem;
-    bottom: 0.5rem;
+    bottom: .5rem;
     left: 0;
+
     display: none;
+
+    width: 100%;
+
+    text-align: center;
 }
-.success{
+.success
+{
     color: blue;
 }
-.hasSuccess{
+.hasSuccess
+{
     color: red;
+}
+
+#tip
+{
+    font-size: .3rem;
+
+    position: absolute;
+    bottom: 0;
+    left: 0;
+
+    width: 100%;
+
+    text-align: center;
 }

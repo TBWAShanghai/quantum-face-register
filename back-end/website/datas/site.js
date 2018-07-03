@@ -9,6 +9,23 @@ const {
 	requestPost
 } = require('../../utils/utils.js');
 
+module.exports.detect = function(req, res) {
+	return new Promise(function(resolve, reject) {
+		var base64Data = req.body.img.replace(/^data:image\/jpeg;base64,/, "");
+		var binaryData = new Buffer(base64Data, 'base64').toString('binary');
+
+		let pic = {
+			img: base64Data
+		}
+
+		let url = Config.apiFace + '/tencent/detect';
+
+		requestPost(url, JSON.stringify(pic)).then(function(data) {
+			resolve(data);
+		});
+	});
+}
+
 module.exports.register = function(req, res) {
 	return new Promise(function(resolve, reject) {
 		var exist = req.body.exist;
@@ -24,10 +41,17 @@ module.exports.register = function(req, res) {
 		}
 
 		let url = Config.apiFace + '/tencent/newperson';
+		// console.log(url);
 
 		requestPost(url, JSON.stringify(pic)).then(function(data) {
-			let result=JSON.parse(data);
+			let result = JSON.parse(data);
 			if (result.code == 0) {
+				if (result.data.ret_codes[0] == -1312) {
+					//-1312对个体添加了相似度为99%及以上的人脸
+					let error = -1312;
+					resolve(error);
+					return false;
+				}
 				var img = './register/' + req.body.openid + '.jpg';
 				fs.writeFile(img, binaryData, 'binary', function(err) {
 					if (err) {
@@ -62,7 +86,7 @@ module.exports.register = function(req, res) {
 						resolve(error);
 					});
 				}
-			}else{
+			} else {
 				resolve(result);
 			}
 		})
@@ -85,5 +109,86 @@ module.exports.check = function(req, res) {
 				resolve(result);
 			}
 		});
+	});
+}
+
+module.exports.faceidentify = function(req, res) {
+	return new Promise(function(resolve, reject) {
+		var base64Data = req.body.img.replace(/^data:image\/jpeg;base64,/, "");
+		var binaryData = new Buffer(base64Data, 'base64').toString('binary');
+
+		let pic = {
+			img: base64Data,
+		}
+
+		let url = Config.apiFace + '/tencent/identify';
+		// console.log(url);
+
+		requestPost(url, JSON.stringify(pic)).then(function(data) {
+			let result = JSON.parse(data);
+			if (result.code == 0) {
+				if (result.data.candidates[0].confidence >= Config.confidence) {
+					//识别成功
+					let jsonFind = {
+						openid: result.data.candidates[0].person_id,
+						signed: "true"
+					}
+
+					model.findOne(jsonFind, function(error, result) {
+						if (error) {
+							console.log(error);
+							resolve(error);
+						} else {
+							if (result !== null) {
+								//验证过
+								resolve(result);
+							} else {
+								//写入验证
+								var img = './identify/' + jsonFind.openid + '.jpg';
+								fs.writeFile(img, binaryData, 'binary', function(err) {
+									if (err) {
+										console.log(err);
+									}
+								});
+
+								//存储数据到mongoogdb
+								let json = {
+									openid: jsonFind.openid,
+									faceimg: '/identify/' + req.body.openid + '.jpg',
+									signed: 'true',
+									facebase64: req.body.img
+								}
+								model.create(json, function(error) {
+									resolve(error);
+								});
+							}
+						}
+					});
+				}
+
+			} else {
+				resolve(result);
+			}
+		})
+
+
+	});
+}
+
+module.exports.facesigned = function(req, res) {
+	return new Promise(function(resolve, reject) {
+		let json = {
+			signed: 'true'
+		}
+		model.find(json, function(error, result) {
+			if (error) {
+				console.log(error);
+				resolve(error);
+			} else {
+				resolve(result);
+			}
+		});
+
+
 	});
 }

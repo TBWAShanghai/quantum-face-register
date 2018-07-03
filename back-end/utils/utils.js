@@ -62,7 +62,7 @@ class Utils {
 				})
 				//监听错误事件
 				.on('error', (err) => {
-					console.log(err);
+					// console.log(err);
 					reject(err);
 				});
 			//传入数据

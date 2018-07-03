@@ -8,13 +8,13 @@ const port = process.env.PORT || Config.apiPort;
 
 const server = require('http').createServer(app);
 const io = require("socket.io")(server);
-io.on("connection", function (socket) {
+io.on("connection", function(socket) {
 
-    console.log('socket connected!');
+	console.log('socket connected!');
 
-    socket.on("message", function (obj) {
-        io.emit("message",obj);
-    });
+	socket.on("message", function(obj) {
+		io.emit("message", obj);
+	});
 
 });
 server.listen(Config.socketPort);
@@ -71,6 +71,35 @@ router.post('/register', function(req, res) {
 				data: error
 			});
 		}
+	});
+});
+
+router.post('/identify', function(req, res) {
+	Site.faceidentify(req, res).then((error) => {
+		if (error) {
+			res.json({
+				code: 500,
+				msg: "save error",
+				error: error
+			});
+		} else {
+			res.json({
+				code: 200,
+				msg: "save ok",
+				data: error
+			});
+		}
+	});
+});
+
+router.get('/signed', function(req, res) {
+	Site.facesigned(req, res).then((result) => {
+		res.json({
+			code: 200,
+			msg: "ok",
+			data: result
+		});
+
 	});
 });
 

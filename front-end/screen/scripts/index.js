@@ -1,10 +1,23 @@
 var count = 300;
-// var socketurl="ws://127.0.0.1:5500";
-var socketurl="wss://wechat.mynecis.cn";
-var socket = io.connect(socketurl,{
-  path: '/facesocket/socket.io'
+var socketurl = "ws://127.0.0.1:5500";
+var url = "http://localhost:5000/signed";
+// var socketurl="wss://wechat.mynecis.cn";
+var socket = io.connect(socketurl, {
+	// path: '/facesocket/socket.io'
 });
-var allFaces=[],faceCount=0,isAnimate=false;
+var allNums = [],
+	existArr = [],
+	existNums = [];
+calArr();
+
+function calArr() {
+	for (var i = 0; i < count; i++) {
+		allNums.push(i);
+	}
+}
+
+var allFaces = [],
+	isAnimate = false;
 
 var camera, scene, renderer;
 var controls;
@@ -72,6 +85,8 @@ function init() {
 	addObjects();
 	//addGUI
 	addGUI();
+	//addExits
+	addExitsFaces();
 	//create shape object
 	allShape = addShape();
 	allShape.visible = false;
@@ -133,7 +148,7 @@ function init() {
 	socket.on("message", function(obj) {
 		addFaces(obj.img);
 		facesAni();
-    });
+	});
 
 	window.addEventListener('resize', onWindowResize, false);
 
@@ -141,23 +156,56 @@ function init() {
 
 }
 
-var loaderface=new THREE.TextureLoader();
+var loaderface = new THREE.TextureLoader();
+
 function addFaces(img) {
-	faceCount++;
-	var texture=loaderface.load(img);
+	var texture = loaderface.load(img);
 	allFaces.push(texture);
 	console.log(allFaces);
 }
 
+function addExitsFaces() {
+	$.ajax({
+		url: url,
+		type: "get",
+		dataType: "json",
+		success: function(result) {
+			console.log(result);
+			if (result.code == 200 && result.data) {
+				existArr = result.data;
+				for (var i = 0; i < existArr.length; i++) {
+					var random=calRandom();
+					var base64 = "data:image/jpeg;base64," + existArr[i].facebase64;
+					var texture = loaderface.load(base64);
+					allObjects.children[random].material.map = texture;
+					allObjects.children[random].material.opacity = 1;
+					allObjects.children[random].material.color = new THREE.Color(0xffffff);
+					allObjects.children[random].material.needsUpdate = true;
+				}
+			}
+		},
+		error: function(error) {
+			console.log(error);
+		}
+	});
+}
+
+function calRandom() {
+	var arr = _.difference(allNums, existNums);
+	var random = Math.floor(Math.random() * arr.length);
+	existNums.push(arr[random]);
+	return random;
+}
+
 function facesAni() {
-	if(isAnimate) return;
-	isAnimate=true;
-	allShape.children[0].children[4].material.map=allFaces[0];
-	allShape.children[0].children[4].material.needsUpdate=true;
+	if (isAnimate) return;
+	isAnimate = true;
+	allShape.children[0].children[4].material.map = allFaces[0];
+	allShape.children[0].children[4].material.needsUpdate = true;
 	transformShape(allShape, 2500);
 	setTimeout(function() {
 		// transformTarget(cube, 2000);
-		transformTarget(allShape.children[0], 2000, faceCount,true);
+		transformTarget(allShape.children[0], 2000, calRandom(), true);
 	}, 3000);
 }
 
@@ -548,7 +596,7 @@ function transformShape(targets, duration) {
 
 }
 
-function transformTarget(targets, duration, i,flag) {
+function transformTarget(targets, duration, i, flag) {
 	// target.getWorldPosition(cubeWorldPos);
 	// i = i ? i : 200;
 	targets.visible = true;
@@ -570,10 +618,10 @@ function transformTarget(targets, duration, i,flag) {
 			allObjects.children[i].material.needsUpdate = true;
 			reverseAnim.reset();
 			targets.visible = false;
-			if(flag){
-				isAnimate=false;
+			if (flag) {
+				isAnimate = false;
 				allFaces.shift();
-				if(allFaces.count>0){
+				if (allFaces.count > 0) {
 					facesAni();
 				}
 			}

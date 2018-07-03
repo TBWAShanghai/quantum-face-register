@@ -28,6 +28,15 @@ const schema = new Schema({
 	img: {
 		type: String
 	},
+	signed: {
+		type: String
+	},
+	faceimg: {
+		type: String
+	},
+	facebase64: {
+		type: String
+	},
 	createTime: {
 		type: String,
 		default: getNow
