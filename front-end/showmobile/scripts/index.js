@@ -3,7 +3,7 @@
 // var socketurl = "ws://127.0.0.1:5500";
 var url = "https://wechat.mynecis.cn/faceapi/identify";
 var detecturl = "https://wechat.mynecis.cn/wx/tencent/detect";
-var socketurl="wss://wechat.mynecis.cn";
+var socketurl = "wss://wechat.mynecis.cn";
 window.onload = function() {
   var socket = io.connect(socketurl, {
     path: '/facesocket/socket.io'
@@ -17,7 +17,7 @@ window.onload = function() {
 
   var full = document.getElementById('full');
   var fullContext = full.getContext('2d');
-  var time = 5000;
+  var time = 10000;
   tracker.setInitialScale(4);
   tracker.setInitialScale(1);
   tracker.setStepSize(2);
@@ -31,26 +31,32 @@ window.onload = function() {
   full.height = canvas.height;
   var flag = true;
   var config = new function() {
-    this.width = 180;
+    this.width = 200;
   }
   tracker.on('track', function(event) {
     context.clearRect(0, 0, canvas.width, canvas.height);
-    var rect = event.data[0];
-    if (event.data[0] && rect.width > config.width) {
-
-      if (flag==true) {
+    // var rect = event.data[0];
+    // console.log(event);
+    // if (event.data[0] && rect.width > config.width) {
+    if (event.data[0] && event.data[0].width > config.width) {
+      // context.clearRect(0, 0, canvas.width, canvas.height);
+      var rect = event.data[0];
+      if (flag == true) {
         // console.log("拍照");
+        console.log(rect);
         // shortCut.width = rect.width;
         // shortCut.height = rect.height;
         scContext.clearRect(0, 0, shortCut.width, shortCut.height);
         fullContext.drawImage(video, 0, 0, canvas.width, canvas.height);
         var rectX = (rect.x - 30 > 0) ? (rect.x - 30) : 0;
         var rectY = (rect.y - 30 > 0) ? (rect.y - 30) : 0;
+        var w = (rect.width + 60 >= canvas.width) ? rect.width : rect.width + 60;
+        var h = (rect.height + 60 >= canvas.height) ? rect.height : rect.height + 60;
         // var rectX = rect.x;
         // var rectY = rect.y;
         // console.log(rect.width);
         // console.log(full.toDataURL('image/jpeg'))
-        scContext.drawImage(full, rectX, rectY, rect.width + 60, rect.height + 60, 0, 0, shortCut.width, shortCut.width);
+        scContext.drawImage(full, rectX, rectY, w, h, 0, 0, shortCut.width, shortCut.width);
         // var base64 = full.toDataURL('image/jpeg');
         var base64 = shortCut.toDataURL('image/jpeg');
         sendPhoto(base64);

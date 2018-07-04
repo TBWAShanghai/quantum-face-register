@@ -44,7 +44,7 @@ var qqR, qqTheta, qqDTheta, qqY;
 var manager = new THREE.LoadingManager();
 manager.onLoad = init;
 var loader = new THREE.TextureLoader(manager);
-var bgTexture = loader.load('./images/bg.jpg');
+// var bgTexture = loader.load('./images/bg.jpg');
 
 var appleTexture = loader.load('./images/icons8-apple.png');
 var facebookTexture = loader.load('./images/icons8-facebook.png');
@@ -66,133 +66,131 @@ var allShape;
 // init();
 // animate();
 
-function imageLoad(src, callback) {
-	var img = new Image();
-	img.src = src;
-	img.onload = function() {
-		callback && callback(img);
-	}
-}
+// function imageLoad(src, callback) {
+// 	var img = new Image();
+// 	img.src = src;
+// 	img.onload = function() {
+// 		callback && callback(img);
+// 	}
+// }
 
-function imageCanvas(img) {
-	var canvas = document.createElement('canvas');
-	canvas.width = img.width;
-	canvas.height = img.height;
-	var ctx = canvas.getContext("2d");
-	ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-	// document.body.appendChild(canvas);
-	// ctx.save();
-	var data = ctx.getImageData(0, 0, canvas.width, canvas.height);
-	calculate(data);
-}
+// function imageCanvas(img) {
+// 	var canvas = document.createElement('canvas');
+// 	canvas.width = img.width;
+// 	canvas.height = img.height;
+// 	var ctx = canvas.getContext("2d");
+// 	ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+// 	// document.body.appendChild(canvas);
+// 	// ctx.save();
+// 	var data = ctx.getImageData(0, 0, canvas.width, canvas.height);
+// 	calculate(data);
+// }
 
-function calculate(data) {
-	console.log(data);
-	var particles = data.width * data.height;
-	var geometry = new THREE.BufferGeometry();
+// function calculate(data) {
+// 	console.log(data);
+// 	var particles = data.width * data.height;
+// 	var geometry = new THREE.BufferGeometry();
 
-	var positions = new Float32Array(particles * 3);
-	// var positionscopy = new Float32Array(particles * 3);
-	var colors = new Float32Array(particles * 3);
-	for (var i = 0; i < positions.length; i += 15) {
-		if (data.data[4 * i + 3] !== 0) {
-			// positions
-			positions[3 * i] = parseInt(i % data.width);
-			positions[3 * i + 1] = 200 + parseInt((data.height - i) / data.width);
-			positions[3 * i + 2] = 0;
+// 	var positions = new Float32Array(particles * 3);
+// 	// var positionscopy = new Float32Array(particles * 3);
+// 	var colors = new Float32Array(particles * 3);
+// 	for (var i = 0; i < positions.length; i += 15) {
+// 		if (data.data[4 * i + 3] !== 0) {
+// 			// positions
+// 			positions[3 * i] = parseInt(i % data.width);
+// 			positions[3 * i + 1] = 200 + parseInt((data.height - i) / data.width);
+// 			positions[3 * i + 2] = 0;
 
-			// positionscopy[3 * i] = Math.floor(Math.random() * data.width);
-			// positionscopy[3 * i + 1] = Math.floor(Math.random() * data.height);
-			// positionscopy[3 * i + 2] = 0;
-			// colors
+// 			// positionscopy[3 * i] = Math.floor(Math.random() * data.width);
+// 			// positionscopy[3 * i + 1] = Math.floor(Math.random() * data.height);
+// 			// positionscopy[3 * i + 2] = 0;
+// 			// colors
 
-			colors[3 * i] = data.data[4 * i] / 255.0;
-			colors[3 * i + 1] = data.data[4 * i + 1] / 255.0;
-			colors[3 * i + 2] = data.data[4 * i + 2] / 255.0;
-		}
-	}
-	// geometry.addAttribute('position', new THREE.BufferAttribute(positionscopy, 3));
-	geometry.addAttribute('position', new THREE.BufferAttribute(positions, 3));
-	geometry.addAttribute('color', new THREE.BufferAttribute(colors, 3));
-	//    geometry.computeBoundingSphere();
-	// console.log("geometry",geometry);
-	// var material = new THREE.PointsMaterial({
-	// 	size: 1,
-	// 	vertexColors: THREE.VertexColors
-	// });
-	var uniforms = {
-		color: {
-			value: new THREE.Color(0xffffff)
-		},
-		// texture:{value: new THREE.TextureLoader().load( "//game.gtimg.cn/images/tgideas/2017/three/shader/dot.png")},
-		val: {
-			value: 1.0
-		}
-	};
+// 			colors[3 * i] = data.data[4 * i] / 255.0;
+// 			colors[3 * i + 1] = data.data[4 * i + 1] / 255.0;
+// 			colors[3 * i + 2] = data.data[4 * i + 2] / 255.0;
+// 		}
+// 	}
+// 	// geometry.addAttribute('position', new THREE.BufferAttribute(positionscopy, 3));
+// 	geometry.addAttribute('position', new THREE.BufferAttribute(positions, 3));
+// 	geometry.addAttribute('color', new THREE.BufferAttribute(colors, 3));
+// 	//    geometry.computeBoundingSphere();
+// 	// console.log("geometry",geometry);
+// 	// var material = new THREE.PointsMaterial({
+// 	// 	size: 1,
+// 	// 	vertexColors: THREE.VertexColors
+// 	// });
+// 	var uniforms = {
+// 		color: {
+// 			value: new THREE.Color(0xffffff)
+// 		},
+// 		// texture:{value: new THREE.TextureLoader().load( "//game.gtimg.cn/images/tgideas/2017/three/shader/dot.png")},
+// 		val: {
+// 			value: 1.0
+// 		}
+// 	};
 
-	var material = new THREE.ShaderMaterial({
-		uniforms: uniforms,
-		vertexShader: document.getElementById('vertexshader').textContent,
-		fragmentShader: document.getElementById('fragmentshader').textContent,
-		blending: THREE.AdditiveBlending,
-		depthTest: false,
-		transparent: true
-	});
-	var points = new THREE.Points(geometry, material);
-	scene.add(points);
+// 	var material = new THREE.ShaderMaterial({
+// 		uniforms: uniforms,
+// 		vertexShader: document.getElementById('vertexshader').textContent,
+// 		fragmentShader: document.getElementById('fragmentshader').textContent,
+// 		blending: THREE.AdditiveBlending,
+// 		depthTest: false,
+// 		transparent: true
+// 	});
+// 	var points = new THREE.Points(geometry, material);
+// 	scene.add(points);
 
-	// for (var i = 0; i < positionscopy.length; i++) {
-	// 	anime({
-	// 		targets: positionscopy[i],
-	// 		duration: Math.random() * 2000 + 2000,
-	// 		x: positions[i],
-	// 		easing: 'easeInOutExpo',
-	// 	})
-	// }
-	// 
-	geometry.attributes.position.needsUpdate = true;
-	console.log(geometry.attributes);
-	var pos = {
-		val: 1
-	};
-	tween = new TWEEN.Tween(pos).to({
-		val: 0
-	}, 2000).easing(TWEEN.Easing.Quadratic.InOut).delay(1000).onUpdate(callback);
-	tweenBack = new TWEEN.Tween(pos).to({
-		val: 1
-	}, 2000).easing(TWEEN.Easing.Quadratic.InOut).delay(1000).onUpdate(callback);
-	tween.chain(tweenBack);
-	tweenBack.chain(tween);
-	tween.start();
+// 	// for (var i = 0; i < positionscopy.length; i++) {
+// 	// 	anime({
+// 	// 		targets: positionscopy[i],
+// 	// 		duration: Math.random() * 2000 + 2000,
+// 	// 		x: positions[i],
+// 	// 		easing: 'easeInOutExpo',
+// 	// 	})
+// 	// }
+// 	// 
+// 	geometry.attributes.position.needsUpdate = true;
+// 	console.log(geometry.attributes);
+// 	var pos = {
+// 		val: 1
+// 	};
+// 	tween = new TWEEN.Tween(pos).to({
+// 		val: 0
+// 	}, 2000).easing(TWEEN.Easing.Quadratic.InOut).delay(1000).onUpdate(callback);
+// 	tweenBack = new TWEEN.Tween(pos).to({
+// 		val: 1
+// 	}, 2000).easing(TWEEN.Easing.Quadratic.InOut).delay(1000).onUpdate(callback);
+// 	tween.chain(tweenBack);
+// 	tweenBack.chain(tween);
+// 	tween.start();
 
-	function callback() {
-		points.material.uniforms.val.value = this.val;
-	}
+// 	function callback() {
+// 		points.material.uniforms.val.value = this.val;
+// 	}
 
-	// this.scene.add(particleSystem);
-	// this.particleSystem = particleSystem;
-	// anime({
-	// 	targets: geometry.attributes.position,
-	// 	duration: Math.random() * 2000 + 2000,
-	// 	array: positions,
-	// 	easing: 'easeInOutExpo',
-	// })
-}
-
-function initScene(scene) {
+// 	// this.scene.add(particleSystem);
+// 	// this.particleSystem = particleSystem;
+// 	// anime({
+// 	// 	targets: geometry.attributes.position,
+// 	// 	duration: Math.random() * 2000 + 2000,
+// 	// 	array: positions,
+// 	// 	easing: 'easeInOutExpo',
+// 	// })
+// }
+var cubeTexture;
+function initScene() {
 	//给场景添加天空盒子纹理
 	var cubeTextureLoader = new THREE.CubeTextureLoader();
 	cubeTextureLoader.setPath('./images/space/');
 	//六张图片分别是朝前的（posz）、朝后的（negz）、朝上的（posy）、朝下的（negy）、朝右的（posx）和朝左的（negx）。
-	var cubeTexture = cubeTextureLoader.load([
+	cubeTexture = cubeTextureLoader.load([
 		'right.jpg', 'left.jpg',
 		'top.jpg', 'bottom.jpg',
 		'front.jpg', 'back.jpg'
 	]);
-
-	scene.background = cubeTexture;
 }
-
+initScene();
 
 function init() {
 
@@ -207,12 +205,12 @@ function init() {
 
 	scene.add(allObjects);
 
-	initScene(scene);
+	scene.background = cubeTexture;
 
 	// imageLoad('./images/ani.png', imageCanvas);
 
 	//add bg
-	addBg();
+	// addBg();
 	//addIcons
 	addIcons();
 	//addObjects
@@ -566,7 +564,8 @@ function addObjects() {
 function addGUI() {
 	guiControls = new function() {
 		this.rotationSpeed = 0.01;
-		this.allObjectsX = Math.PI / 4;
+		// this.allObjectsX = Math.PI / 4;
+		this.allObjectsX = 0.5;
 		this.appleR = 1500;
 		this.appleSpeed = 11;
 		this.appleY = 0;
@@ -1015,8 +1014,6 @@ function animate() {
 	qq.position.y = guiControls.qqY * Math.cos(qqTheta);
 	qq.position.z = qqR * Math.sin(qqTheta);
 
-	TWEEN.update();
-
 	controls.update();
 
 	render();
@@ -1027,7 +1024,7 @@ function render() {
 	stats.update();
 	renderer.autoClear = false;
 	renderer.clear();
-	renderer.render(backgroundScene, backgroundCamera);
+	// renderer.render(backgroundScene, backgroundCamera);
 	renderer.render(scene, camera);
 
 }
