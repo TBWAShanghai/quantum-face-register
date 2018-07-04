@@ -2,7 +2,7 @@
 
 1. 微信注册： https://wechat.mynecis.cn/face/register
 
-2. 手机浏览器打开人脸识别（iphone需要ios11）：
+2. 手机浏览器打开人脸识别（iphone需要ios11，微信不支持）：
 https://wechat.mynecis.cn/face/showmobile/
 
 3. 电脑打开：https://wechat.mynecis.cn/face/screen/
