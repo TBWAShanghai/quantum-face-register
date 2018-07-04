@@ -18,11 +18,55 @@
         <button id="helix">HELIX</button>
         <button id="grid">GRID</button>
     </div>
+    <script type="x-shader/x-vertex" id="vertexshader">
+
+            attribute float size;
+            attribute vec3 position2;
+            // attribute vec3 color;
+            uniform float val;
+            // varying vec3 vColor;
+
+            void main() {
+                vec3 vPos;
+                // vColor = color;
+                vPos.x = position.x * val + position2.x * (1.-val);
+                vPos.y = position.y* val + position2.y * (1.-val);
+                vPos.z = position.z* val + position2.z * (1.-val);
+
+                vec4 mvPosition = modelViewMatrix * vec4( vPos, 1.0 );
+
+                gl_PointSize = 4.;
+
+                gl_Position = projectionMatrix * mvPosition;
+
+            }
+
+        </script>
+
+        <script type="x-shader/x-fragment" id="fragmentshader">
+            uniform vec3 color;
+            uniform sampler2D texture;
+
+            // varying vec3 vColor;
+
+            void main() {
+
+                vec3 vColor = vec3(1.0, 1., 1.);
+
+
+                gl_FragColor = vec4( color * vColor, 1.0 );
+
+                gl_FragColor = gl_FragColor * texture2D( texture, gl_PointCoord );
+
+            }
+
+
+        </script>
     <script src="libs/three.min.js"></script>
     <script src="libs/jquery.min.js"></script>
     <script src="libs/underscore.min.js"></script>
     <script src="libs/socket.io.js"></script>
-    <!-- <script src="libs/tween.min.js"></script> -->
+    <script src="libs/tween.min.js"></script>
     <script src="libs/anime.min.js"></script>
     <script src="libs/TrackballControls.js"></script>
     <script src="libs/dat.gui.min.js"></script>

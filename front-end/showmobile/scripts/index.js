@@ -17,7 +17,7 @@ window.onload = function() {
 
   var full = document.getElementById('full');
   var fullContext = full.getContext('2d');
-  var time = 10000;
+  var time = 5000;
   tracker.setInitialScale(4);
   tracker.setInitialScale(1);
   tracker.setStepSize(2);
@@ -31,14 +31,14 @@ window.onload = function() {
   full.height = canvas.height;
   var flag = true;
   var config = new function() {
-    this.width = 200;
+    this.width = 180;
   }
   tracker.on('track', function(event) {
     context.clearRect(0, 0, canvas.width, canvas.height);
     var rect = event.data[0];
     if (event.data[0] && rect.width > config.width) {
 
-      if (flag) {
+      if (flag==true) {
         // console.log("拍照");
         // shortCut.width = rect.width;
         // shortCut.height = rect.height;
@@ -78,7 +78,7 @@ window.onload = function() {
   gui.add(tracker, 'edgesDensity', 0.1, 0.5).step(0.01);
   gui.add(tracker, 'initialScale', 1.0, 10.0).step(0.1);
   gui.add(tracker, 'stepSize', 1, 5).step(0.1);
-  gui.add(config, 'width', 200, 500);
+  gui.add(config, 'width', 100, 500);
 
   function sendPhoto(photo) {
     $.ajax({
