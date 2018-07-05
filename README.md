@@ -7,6 +7,10 @@ https://wechat.mynecis.cn/face/showmobile/
 
 3. 电脑打开：https://wechat.mynecis.cn/face/screen/
 
+掘金文章
+https://juejin.im/post/5b3d8662e51d45191b60f817
+
+
 # 项目说明
 
 ##目录结构
